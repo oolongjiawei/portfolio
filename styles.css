@@ -142,13 +142,6 @@ em { font-family: var(--serif); font-style: italic; }
 .rigbar button:hover { border-color: var(--ink-3); color: var(--ink); }
 .rigbar button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .rigbar input[type="range"] { width: 100%; accent-color: var(--accent); margin: 2px 0; }
-.rig figcaption { margin-top: 10px; font-size: 13px; line-height: 1.5; color: var(--ink-3); }
-.rig figcaption b { color: var(--ink-2); font-weight: 600; }
-.rig__how { margin-top: 6px; }
-.rig__how summary { cursor: pointer; font: 500 12px var(--mono); color: var(--ink-2); width: fit-content; }
-.rig__how summary:hover { color: var(--accent); }
-.rig__how p { margin: 8px 0 0; }
-.c-l { color: #2d6bff; font-weight: 600; } .c-r { color: #ff3b30; font-weight: 600; } .c-c { color: #d49f00; font-weight: 600; }
 
 
 
