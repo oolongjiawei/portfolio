@@ -16,22 +16,27 @@ if ("IntersectionObserver" in window) {
 }
 
 
-// Before / after comparison (Karkumi v1 vs v2)
+// Before / after comparison (Karkumi v1 vs v2), by page and device
 document.querySelectorAll(".compare").forEach((fig) => {
   const stage = fig.querySelector(".compare__stage");
   const range = fig.querySelector(".compare__range");
   const imgs = { v1: fig.querySelector('[data-v="v1"]'), v2: fig.querySelector('[data-v="v2"]') };
   range.addEventListener("input", () => stage.style.setProperty("--pos", `${range.value}%`));
-  fig.querySelectorAll("button[data-device]").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const device = btn.dataset.device;
-      fig.dataset.device = device;
-      fig.querySelectorAll("button[data-device]").forEach((b) => b.setAttribute("aria-pressed", b === btn));
-      for (const v of ["v1", "v2"]) {
-        imgs[v].src = `assets/karkumi-${v}-${device}.jpg`;
-        imgs[v].width = device === "mobile" ? 640 : 1280;
-        imgs[v].height = device === "mobile" ? 960 : 800;
-      }
-    });
-  });
+
+  const render = () => {
+    const { page, device } = fig.dataset;
+    for (const v of ["v1", "v2"]) {
+      imgs[v].src = `assets/karkumi-${v}-${page}-${device}.jpg`;
+      imgs[v].width = device === "mobile" ? 640 : 1280;
+      imgs[v].height = device === "mobile" ? 960 : 800;
+    }
+  };
+  for (const key of ["page", "device"]) {
+    const buttons = fig.querySelectorAll(`button[data-${key}]`);
+    buttons.forEach((btn) => btn.addEventListener("click", () => {
+      fig.dataset[key] = btn.dataset[key];
+      buttons.forEach((b) => b.setAttribute("aria-pressed", b === btn));
+      render();
+    }));
+  }
 });
