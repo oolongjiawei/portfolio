@@ -54,54 +54,6 @@
         </p>
         <p class="hero__proof">5 yrs animation rigging · Microsoft hackathon winner · Repeat client, Karkumi Café · Tableau dashboards</p>
       </div>
-
-      <figure class="rig" aria-label="Interactive character rig demo">
-        <svg id="rig" viewBox="0 0 400 420" aria-hidden="true">
-          <defs>
-            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M20 0H0V20" fill="none" class="rig__grid" />
-            </pattern>
-            <radialGradient id="rig-spot" cx="50%" cy="58%" r="60%">
-              <stop offset="0" class="rig__spot0" />
-              <stop offset="1" class="rig__spot1" />
-            </radialGradient>
-            <clipPath id="rig-headclip"><circle r="46" /></clipPath>
-          </defs>
-          <rect width="400" height="420" fill="url(#rig-spot)" />
-          <rect width="400" height="420" fill="url(#grid)" />
-        </svg>
-        <div class="rigbar" role="group" aria-label="Rig controls">
-          <div class="rigbar__row">
-            <span class="rigbar__hint">Drag to pose</span>
-            <button type="button" data-pose="wave">Wave</button>
-            <button type="button" data-pose="cheer">Cheer</button>
-            <button type="button" id="rig-auto" aria-pressed="false">▶ Turnaround</button>
-            <button type="button" class="rigbar__more" aria-expanded="false" aria-controls="rig-panel">All controls +</button>
-          </div>
-          <div class="rigbar__panel" id="rig-panel" hidden>
-            <div class="rigbar__row">
-              <span class="rigbar__label">View</span>
-              <button type="button" data-view="0">Front</button>
-              <button type="button" data-view="45">3/4</button>
-              <button type="button" data-view="90">Side</button>
-              <button type="button" data-view="180">Back</button>
-            </div>
-            <input type="range" id="rig-rot" min="-180" max="180" step="1" value="0" aria-label="Character rotation in degrees" />
-            <div class="rigbar__row">
-              <span class="rigbar__label">Pose</span>
-              <button type="button" data-pose="idle">Idle</button>
-              <button type="button" data-pose="wave">Wave</button>
-              <button type="button" data-pose="cheer">Cheer</button>
-              <button type="button" data-pose="hips">Hands on hips</button>
-            </div>
-            <div class="rigbar__row">
-              <span class="rigbar__label">Display</span>
-              <button type="button" id="rig-skel" aria-pressed="false">Skeleton</button>
-              <button type="button" id="rig-ctrl" aria-pressed="true">Controls</button>
-            </div>
-          </div>
-        </div>
-      </figure>
     </section>
 
     <!-- WORK -->
@@ -458,6 +410,5 @@
   </footer>
 
   <script src="main.js" defer></script>
-  <script src="rig.js" defer></script>
 </body>
 </html>
