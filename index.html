@@ -203,22 +203,31 @@
                 </div>
               </div>
               <div class="phone">
-                <span class="phone__top" aria-hidden="true"></span>
-                <div class="compare__stage">
-                  <div class="compare__after">
-                    <img class="compare__img" data-v="v2" src="assets/karkumi-v2-home-mobile.jpg" alt="Karkumi Cafe v2, in development" loading="lazy" width="640" height="960" />
-                    <span class="compare__tag compare__tag--r">v2 · dev</span>
+                <div class="phone__screen">
+                  <div class="phone__status" aria-hidden="true">
+                    <span class="phone__time">9:41</span>
+                    <span class="phone__island"></span>
+                    <span class="phone__icons">
+                      <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+                      <svg viewBox="0 0 16 12"><path d="M8 2.2c2.4 0 4.6.9 6.3 2.5l1.2-1.3A10.8 10.8 0 0 0 8 .4 10.8 10.8 0 0 0 .5 3.4l1.2 1.3A9 9 0 0 1 8 2.2Zm0 3.6c1.4 0 2.7.5 3.8 1.5l1.2-1.3A7.4 7.4 0 0 0 8 4a7.4 7.4 0 0 0-5 2l1.2 1.3A5.6 5.6 0 0 1 8 5.8Zm0 3.5c.5 0 1 .2 1.4.5L8 11.6 6.6 9.8c.4-.3.9-.5 1.4-.5Z"/></svg>
+                      <svg viewBox="0 0 27 12"><rect x="0.5" y="0.5" width="23" height="11" rx="3" fill="none" stroke="#000" stroke-opacity=".4"/><rect x="2" y="2" width="20" height="8" rx="1.8"/><rect x="24.5" y="4" width="1.8" height="4" rx=".9" fill-opacity=".4"/></svg>
+                    </span>
                   </div>
-                  <div class="compare__before">
-                    <img class="compare__img" data-v="v1" src="assets/karkumi-v1-home-mobile.jpg" alt="Karkumi Cafe v1, live" loading="lazy" width="640" height="960" />
-                    <span class="compare__tag compare__tag--l">v1 · live</span>
+                  <div class="compare__stage">
+                    <div class="compare__after">
+                      <img class="compare__img" data-v="v2" src="assets/karkumi-v2-home-mobile.jpg" alt="Karkumi Cafe v2, in development" loading="lazy" width="786" height="1596" />
+                      <span class="compare__tag compare__tag--r">v2 · dev</span>
+                    </div>
+                    <div class="compare__before">
+                      <img class="compare__img" data-v="v1" src="assets/karkumi-v1-home-mobile.jpg" alt="Karkumi Cafe v1, live" loading="lazy" width="786" height="1596" />
+                      <span class="compare__tag compare__tag--l">v1 · live</span>
+                    </div>
+                    <span class="compare__handle" aria-hidden="true"></span>
+                    <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
                   </div>
-                  <span class="compare__handle" aria-hidden="true"></span>
-                  <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
                 </div>
-                <span class="phone__home" aria-hidden="true"></span>
               </div>
-              <figcaption class="compare__cap">Shown at iPhone 4 size (320 × 480). Drag to compare.</figcaption>
+              <figcaption class="compare__cap">Shown at iPhone 14 Pro size (393 × 852). Drag to compare.</figcaption>
             </figure>
           </div>
         </article>
@@ -244,6 +253,28 @@
             <span class="tag">Full-stack · Capstone</span>
             <span class="mono">2024</span>
           </div>
+          <figure class="showcase" aria-label="Fortune House live demo screenshots">
+            <div class="showcase__chrome" aria-hidden="true">
+              <span></span><span></span><span></span>
+              <p>dorie-fortune-house.vercel.app</p>
+            </div>
+            <a class="showcase__stage" href="https://dorie-fortune-house.vercel.app" target="_blank" rel="noopener" aria-label="Open the Fortune House live demo">
+              <img class="is-on" src="assets/fortune-1-home.jpg" alt="Fortune House home: tap the lucky cat to start" width="1100" height="687" loading="lazy" />
+              <img src="assets/fortune-2-result.jpg" alt="Bazi result generated from a birth date" width="1100" height="687" loading="lazy" />
+              <img src="assets/fortune-3-chart.jpg" alt="Saved personal Bazi chart" width="1100" height="687" loading="lazy" />
+              <img src="assets/fortune-4-cookie.jpg" alt="Daily fortune cookie" width="1100" height="687" loading="lazy" />
+              <span class="showcase__cta">Try the live demo ↗</span>
+            </a>
+            <figcaption class="showcase__bar">
+              <span class="showcase__label">1 · Tap the lucky cat</span>
+              <span class="showcase__dots" role="group" aria-label="Screens">
+                <button type="button" aria-label="Home" aria-pressed="true" data-label="1 · Tap the lucky cat"></button>
+                <button type="button" aria-label="Bazi result" aria-pressed="false" data-label="2 · Your Four Pillars, computed live"></button>
+                <button type="button" aria-label="Saved chart" aria-pressed="false" data-label="3 · Saved personal chart"></button>
+                <button type="button" aria-label="Fortune cookie" aria-pressed="false" data-label="4 · Daily fortune cookie"></button>
+              </span>
+            </figcaption>
+          </figure>
           <h3>Fortune House</h3>
           <p>
             Personalized readings from birth data using the Four Pillars of Destiny (Bazi). I wrote the

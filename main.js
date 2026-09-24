@@ -27,8 +27,8 @@ document.querySelectorAll(".compare").forEach((fig) => {
     const { page, device } = fig.dataset;
     for (const v of ["v1", "v2"]) {
       imgs[v].src = `assets/karkumi-${v}-${page}-${device}.jpg`;
-      imgs[v].width = device === "mobile" ? 640 : 1280;
-      imgs[v].height = device === "mobile" ? 960 : 800;
+      imgs[v].width = device === "mobile" ? 786 : 1280;
+      imgs[v].height = device === "mobile" ? 1596 : 800;
     }
   };
   for (const key of ["page", "device"]) {
@@ -39,4 +39,25 @@ document.querySelectorAll(".compare").forEach((fig) => {
       render();
     }));
   }
+});
+
+// Fortune House showcase: cross-fade through the demo screens
+document.querySelectorAll(".showcase").forEach((fig) => {
+  const imgs = [...fig.querySelectorAll(".showcase__stage img")];
+  const dots = [...fig.querySelectorAll(".showcase__dots button")];
+  const label = fig.querySelector(".showcase__label");
+  let i = 0, timer = null;
+  const go = (n) => {
+    i = (n + imgs.length) % imgs.length;
+    imgs.forEach((im, k) => im.classList.toggle("is-on", k === i));
+    dots.forEach((d, k) => d.setAttribute("aria-pressed", k === i));
+    label.textContent = dots[i].dataset.label;
+  };
+  const play = () => { if (!timer && !matchMedia("(prefers-reduced-motion: reduce)").matches) timer = setInterval(() => go(i + 1), 3200); };
+  const stop = () => { clearInterval(timer); timer = null; };
+  dots.forEach((d, k) => d.addEventListener("click", () => { stop(); go(k); }));
+  fig.addEventListener("mouseenter", stop);
+  fig.addEventListener("mouseleave", play);
+  fig.addEventListener("focusin", stop);
+  play();
 });

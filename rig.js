@@ -28,8 +28,8 @@
 
   const C = {
     line: "#1d1b1f", skin: "#f3c9a4", skinShade: "#e0a57e", hair: "#3a2c27",
-    hoodie: "#e8491d", hoodieShade: "#b9370f", pants: "#2d3142",
-    shoe: "#f7f4ee", glove: "#ffffff", cheek: "#ff8a7a", mouth: "#7a2630", badge: "#2457e6",
+    shirt: "#e8491d", shirtShade: "#b9370f", pants: "#2d3142",
+    shoe: "#f7f4ee", glove: "#ffffff", cheek: "#ff8a7a", mouth: "#7a2630",
   };
   const OUT = 2.5;            // outline width
   const GROUND = 392;
@@ -94,7 +94,7 @@
   for (const s of SIDES) {
     const g = $("g", {});
     legs[s] = { g, hose: hose(g, C.pants, 21), shoe: $("ellipse", { fill: C.shoe, stroke: C.line, "stroke-width": OUT }, g),
-      lace: $("path", { fill: "none", stroke: C.hoodie, "stroke-width": 2.5, "stroke-linecap": "round" }, g) };
+      lace: $("path", { fill: "none", stroke: C.shirt, "stroke-width": 2.5, "stroke-linecap": "round" }, g) };
   }
   // Arms
   const arms = {};
@@ -104,27 +104,19 @@
     const thumb = $("circle", { r: 5.5, cx: 7, cy: -9, fill: C.glove, stroke: C.line, "stroke-width": OUT }, glove);
     $("circle", { r: 11.5, cx: 8, cy: 0, fill: C.glove, stroke: C.line, "stroke-width": OUT }, glove);
     $("rect", { x: -5, y: -9, width: 8, height: 18, rx: 3, fill: C.glove, stroke: C.line, "stroke-width": OUT }, glove);
-    arms[s] = { g, hose: hose(g, C.hoodie, 17), glove, thumb };
+    arms[s] = { g, hose: hose(g, C.skin, 14), sleeve: hose(g, C.shirt, 20), glove, thumb };
     g.appendChild(glove);
   }
-  // Hood
-  const hood = $("ellipse", { fill: C.hoodieShade, stroke: C.line, "stroke-width": OUT });
   // Torso
   const torsoG = $("g", {});
   const brief = $("path", { fill: C.pants }, torsoG);
-  const torso = $("path", { fill: C.hoodie, stroke: C.line, "stroke-width": OUT, "stroke-linejoin": "round" }, torsoG);
-  const pocket = $("path", { fill: C.hoodieShade, stroke: C.line, "stroke-width": 2, "stroke-linejoin": "round" }, torsoG);
-  const strings = SIDES.map(() => ({
-    l: $("path", { stroke: "#fff", "stroke-width": 2.5, "stroke-linecap": "round" }, torsoG),
-    tip: $("circle", { r: 2.5, fill: "#fff", stroke: C.line, "stroke-width": 1.2 }, torsoG),
-  }));
-  const badge = $("ellipse", { fill: C.badge, stroke: C.line, "stroke-width": 1.5 }, torsoG);
+  const torso = $("path", { fill: C.shirt, stroke: C.line, "stroke-width": OUT, "stroke-linejoin": "round" }, torsoG);
   // Neck
   const neckG = $("g", {});
   const neck = hose(neckG, C.skin, 15);
+  const collar = $("path", { fill: "none", stroke: C.shirtShade, "stroke-width": 4, "stroke-linecap": "round" }, neckG);
   // Head (drawn in head-local space, then translated/rotated)
   const headG = $("g", {});
-  const curl = $("path", { d: "M0 0 C4 -16 20 -16 16 -6 C13 1 5 -2 8 -9", fill: "none", stroke: C.hair, "stroke-width": 4.5, "stroke-linecap": "round" }, headG);
   const bun = $("circle", { r: 17, fill: C.hair, stroke: C.line, "stroke-width": OUT }, headG);
   const skull = $("circle", { r: R, fill: C.hair, stroke: C.line, "stroke-width": OUT }, headG);
   const face = $("path", { fill: C.skin, "clip-path": "url(#rig-headclip)" }, headG);
@@ -188,6 +180,13 @@
   const hosePath = (a, m, b) => {
     const cx = 2 * m.x - (a.x + b.x) / 2, cy = 2 * m.y - (a.y + b.y) / 2;   // curve passes through m
     return `M${f(a.x)} ${f(a.y)}Q${f(cx)} ${f(cy)} ${f(b.x)} ${f(b.y)}`;
+  };
+  // The first `u` (0–1) of the same curve hosePath draws
+  const hoseSegment = (a, m, b, u) => {
+    const c = { x: 2 * m.x - (a.x + b.x) / 2, y: 2 * m.y - (a.y + b.y) / 2 };
+    const q = { x: a.x + (c.x - a.x) * u, y: a.y + (c.y - a.y) * u };
+    const e = { x: (1 - u) ** 2 * a.x + 2 * (1 - u) * u * c.x + u * u * b.x, y: (1 - u) ** 2 * a.y + 2 * (1 - u) * u * c.y + u * u * b.y };
+    return `M${f(a.x)} ${f(a.y)}Q${f(q.x)} ${f(q.y)} ${f(e.x)} ${f(e.y)}`;
   };
   const bonePath = (a, b) => {
     const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
@@ -393,6 +392,8 @@
       const A = arms[s];
       const ap = hosePath(J[`sh${s}`], arm.mid, arm.end);
       A.hose.o.setAttribute("d", ap); A.hose.f.setAttribute("d", ap);
+      const sl = hoseSegment(J[`sh${s}`], arm.mid, arm.end, 0.3);   // short sleeve
+      A.sleeve.o.setAttribute("d", sl); A.sleeve.f.setAttribute("d", sl);
       const flip = (s * cp >= 0 ? 1 : -1) * (Math.cos(ang) >= 0 ? 1 : -1);
       A.glove.setAttribute("transform", `translate(${f(arm.end.x)} ${f(arm.end.y)}) rotate(${f(deg(ang))}) scale(1 ${-flip})`);
     }
@@ -410,43 +411,12 @@
     const hwP = Math.hypot(25 * cp, 11 * sp), pY = J.cog.y;
     brief.setAttribute("d", `M${f(xB - hwP)} ${f(pY + 4)}H${f(xB + hwP)}V${f(pY + 16)}Q${f(xB + hwP)} ${f(pY + 28)} ${f(xB)} ${f(pY + 28)}Q${f(xB - hwP)} ${f(pY + 28)} ${f(xB - hwP)} ${f(pY + 16)}Z`);
 
-    // A band of the torso surface between two longitudes → visible [minX, maxX]
-    const band = (lo, hi, a, b) => {
-      let mn = Infinity, mx = -Infinity;
-      for (let i = 0; i <= 16; i++) {
-        const l = lo + ((hi - lo) * i) / 16;
-        const x3 = a * Math.sin(l), z3 = b * Math.cos(l);
-        if (depth(x3, z3) > 0) { const x = proj(x3, z3); mn = Math.min(mn, x); mx = Math.max(mx, x); }
-      }
-      return mx - mn > 2 ? [mn, mx] : null;
-    };
-    const pT = band(-0.55, 0.55, 35, 22), pB = band(-0.75, 0.75, 37, 24);
-    const py1 = J.cog.y - 18, py2 = J.cog.y + 10;
-    const xAt = (y) => lerp(xT, xB, (y - top) / (bot - top));
-    show(pocket, pT && pB);
-    if (pT && pB) {
-      const a = xAt(py1), b = xAt(py2);
-      pocket.setAttribute("d", `M${f(a + pT[0])} ${f(py1)}L${f(a + pT[1])} ${f(py1)}L${f(b + pB[1])} ${f(py2)}L${f(b + pB[0])} ${f(py2)}Z`);
-    }
-    SIDES.forEach((s, i) => {
-      const l = s * 0.24, x3 = 34 * Math.sin(l), z3 = 21 * Math.cos(l);
-      const vis = depth(x3, z3) > 8;
-      const x = xT + proj(x3, z3);
-      show(strings[i].l, vis); show(strings[i].tip, vis);
-      strings[i].l.setAttribute("d", `M${f(x)} ${f(top + 5)}L${f(x + sp * 2)} ${f(top + 34)}`);
-      set(strings[i].tip, { cx: f(x + sp * 2), cy: f(top + 36) });
-    });
-    {
-      const l = -0.5, g = Math.cos(l + phi);
-      show(badge, g > 0.05);
-      set(badge, { cx: f(xAt(top + 28) + proj(35 * Math.sin(l), 22 * Math.cos(l))), cy: f(top + 28), rx: f(6 * Math.max(g, 0)), ry: 6 });
-    }
-    const hoodD = depth(0, -21);
-    set(hood, { cx: f(xT - 18 * sp), cy: f(top + 4), rx: f(20 + 9 * Math.abs(cp)), ry: 15 });
-
     // Neck
     const np = `M${f(J.chest.x)} ${f(J.chest.y)}L${f(J.head.x)} ${f(J.head.y + 20)}`;
     neck.o.setAttribute("d", np); neck.f.setAttribute("d", np);
+    // Crew collar: dips toward the camera from the front, flattens in profile
+    const cw = Math.hypot(12 * cp, 9 * sp), dip = 9 * cp;
+    collar.setAttribute("d", `M${f(xT - cw)} ${f(top + 1)}Q${f(xT + 6 * sp)} ${f(top + 1 + dip * 2)} ${f(xT + cw)} ${f(top + 1)}`);
 
     // ── Head: a real sphere with its own yaw (look-at) and pitch ──
     const recent = t - S.look.t < 3000;
@@ -530,8 +500,6 @@
     } else {
       set(mouth, { fill: "none", d: `M${f(m.x - mw)} ${f(m.y)}Q${f(m.x)} ${f(m.y + 7)} ${f(m.x + mw)} ${f(m.y)}` });
     }
-    const top3 = sph(0.15, 1.35);
-    curl.setAttribute("transform", `translate(${f(top3.x)} ${f(top3.y - 2)}) scale(${f(cY || 0.01)} 1)`);
     const bn = sph(Math.PI, 0.95, R + 6);
     set(bun, { cx: f(bn.x), cy: f(bn.y) });
     // Bun goes in front of or behind the skull
@@ -548,13 +516,11 @@
     const midArms = armsSorted.filter((s) => limbDepth[`arm${s}`] >= -6 && limbDepth[`hand${s}`] <= 4);
     const front = armsSorted.filter((s) => limbDepth[`arm${s}`] >= -6 && limbDepth[`hand${s}`] > 4);
     behind.forEach((s) => order.push(arms[s].g));
-    if (hoodD < 0) order.push(hood);
     order.push(torsoG, neckG);
-    if (hoodD >= 0) order.push(hood);
     midArms.forEach((s) => order.push(arms[s].g));
     order.push(headG);
     front.forEach((s) => order.push(arms[s].g));
-    const key = `${legsSorted}|${behind}|${midArms}|${front}|${hoodD < 0}`;
+    const key = `${legsSorted}|${behind}|${midArms}|${front}`;
     if (key !== lastOrder) { order.forEach((g) => char.appendChild(g)); lastOrder = key; }
 
     // ── Skeleton overlay ──
