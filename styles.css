@@ -243,8 +243,8 @@ em { font-family: var(--serif); font-style: italic; }
 .tag--win { border-color: color-mix(in srgb, var(--win) 55%, transparent); color: var(--win); }
 .stack { list-style: none; padding: 0; margin: auto 0 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .stack li { font: 400 12px var(--mono); padding: 3px 8px; background: var(--paper-2); border-radius: 6px; color: var(--ink-2); }
-.project__links { display: flex; gap: 18px; font: 500 13.5px var(--mono); }
-.project__links a { text-decoration: none; color: var(--accent); }
+.project__links { display: flex; flex-wrap: wrap; gap: 8px 18px; font: 500 13.5px var(--mono); }
+.project__links a { white-space: nowrap; text-decoration: none; color: var(--accent); }
 .project__links a:hover { text-decoration: underline; }
 
 

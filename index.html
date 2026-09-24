@@ -87,12 +87,17 @@
               <ul class="stack"><li>Figma</li><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>SEO</li></ul>
               <div class="project__links">
                 <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">Visit v2 →</a>
+                <a href="https://karkumicafe-2025.vercel.app" target="_blank" rel="noopener">My 2025 site ↗</a>
                 <a href="https://www.karkumicafe.com" target="_blank" rel="noopener">v1 current site ↗</a>
               </div>
             </div>
 
-            <figure class="compare" data-device="mobile" data-page="home">
+            <figure class="compare" data-device="mobile" data-page="home" data-before="v0">
               <div class="compare__bar">
+                <div class="compare__tabs" role="group" aria-label="Compare v2 with">
+                  <button type="button" data-before="v0" aria-pressed="true">vs 2025</button>
+                  <button type="button" data-before="v1" aria-pressed="false">vs v1</button>
+                </div>
                 <div class="compare__tabs" role="group" aria-label="Page">
                   <button type="button" data-page="home" aria-pressed="true">Home</button>
                   <button type="button" data-page="menu" aria-pressed="false">Menu</button>
@@ -119,11 +124,11 @@
                       <span class="compare__tag compare__tag--r">v2 · dev</span>
                     </div>
                     <div class="compare__before">
-                      <img class="compare__img" data-v="v1" src="assets/karkumi-v1-home-mobile.jpg" alt="Karkumi Cafe v1, live" loading="lazy" width="786" height="1596" />
-                      <span class="compare__tag compare__tag--l">v1 · live</span>
+                      <img class="compare__img" data-v="before" src="assets/karkumi-v0-home-mobile.jpg" alt="Karkumi Cafe, my first site from 2025" loading="lazy" width="786" height="1596" />
+                      <span class="compare__tag compare__tag--l">2025 · mine</span>
                     </div>
                     <span class="compare__handle" aria-hidden="true"></span>
-                    <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
+                    <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare the earlier site with v2" />
                   </div>
                 </div>
               </div>

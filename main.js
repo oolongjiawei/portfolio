@@ -16,22 +16,31 @@ if ("IntersectionObserver" in window) {
 }
 
 
-// Before / after comparison (Karkumi v1 vs v2), by page and device
+// Before / after comparison (Karkumi 2025 or v1 vs v2), by version, page and device
+const BEFORE = {
+  v0: { tag: "2025 · mine", alt: "Karkumi Cafe, my first site from 2025" },
+  v1: { tag: "v1 · live", alt: "Karkumi Cafe v1, live" },
+};
 document.querySelectorAll(".compare").forEach((fig) => {
   const stage = fig.querySelector(".compare__stage");
   const range = fig.querySelector(".compare__range");
-  const imgs = { v1: fig.querySelector('[data-v="v1"]'), v2: fig.querySelector('[data-v="v2"]') };
+  const before = fig.querySelector('[data-v="before"]');
+  const after = fig.querySelector('[data-v="v2"]');
+  const beforeTag = fig.querySelector(".compare__tag--l");
   range.addEventListener("input", () => stage.style.setProperty("--pos", `${range.value}%`));
 
   const render = () => {
     const { page, device } = fig.dataset;
-    for (const v of ["v1", "v2"]) {
-      imgs[v].src = `assets/karkumi-${v}-${page}-${device}.jpg`;
-      imgs[v].width = device === "mobile" ? 786 : 1280;
-      imgs[v].height = device === "mobile" ? 1596 : 800;
+    const b = fig.dataset.before;
+    for (const [img, v] of [[before, b], [after, "v2"]]) {
+      img.src = `assets/karkumi-${v}-${page}-${device}.jpg`;
+      img.width = device === "mobile" ? 786 : 1280;
+      img.height = device === "mobile" ? 1596 : 800;
     }
+    before.alt = BEFORE[b].alt;
+    beforeTag.textContent = BEFORE[b].tag;
   };
-  for (const key of ["page", "device"]) {
+  for (const key of ["before", "page", "device"]) {
     const buttons = fig.querySelectorAll(`button[data-${key}]`);
     buttons.forEach((btn) => btn.addEventListener("click", () => {
       fig.dataset[key] = btn.dataset[key];
