@@ -1,6 +1,6 @@
 # Dorie Long — Portfolio
 
-Personal portfolio of Dorie (Jiawei) Long, front-end developer and data analyst in Toronto.
+Personal portfolio of Dorie (Jiawei) Long, front-end developer in Toronto.
 
 Plain HTML/CSS/JS, no build step.
 
