@@ -61,3 +61,9 @@ document.querySelectorAll(".showcase").forEach((fig) => {
   fig.addEventListener("focusin", stop);
   play();
 });
+
+// job-radar: step through the pipeline once it scrolls into view
+document.querySelectorAll(".flow").forEach((flow) => {
+  if (!("IntersectionObserver" in window)) return;
+  new IntersectionObserver(([e]) => flow.classList.toggle("is-live", e.isIntersecting), { threshold: 0.4 }).observe(flow);
+});

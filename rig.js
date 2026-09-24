@@ -289,6 +289,14 @@
   bar?.addEventListener("click", (e) => {
     const b = e.target.closest("button");
     if (!b) return;
+    if (b.classList.contains("rigbar__more")) {
+      const panel = document.getElementById(b.getAttribute("aria-controls"));
+      const open = panel.hidden;
+      panel.hidden = !open;
+      b.setAttribute("aria-expanded", open);
+      b.textContent = open ? "All controls −" : "All controls +";
+      return;
+    }
     if (b.id === "rig-auto") { S.touched = true; S.auto ? (S.auto = false) : startAuto(); }
     else {
       interrupt();

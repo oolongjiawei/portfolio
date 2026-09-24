@@ -36,23 +36,22 @@
     <!-- HERO -->
     <section class="hero">
       <div class="hero__text">
-        <p class="eyebrow"><span class="dot"></span>Open to work · Toronto, ON</p>
+        <p class="eyebrow"><span class="dot"></span>Open to work · Toronto</p>
         <h1>Dorie Long</h1>
         <p class="hero__role">Front-End Developer &amp; Data Analyst<br /><em>with an animator's eye.</em></p>
         <p class="hero__lede">
-          I spent five years rigging characters for <strong>Looney Tunes</strong> and TV animation —
-          building the hidden structure that makes things move well. Now I build responsive
-          <strong>React interfaces</strong> people enjoy using, and dig into <strong>data</strong> to find
-          the story worth showing.
+          I spent five years rigging characters for animation. Now I build interfaces people enjoy
+          using, and find the story in the data behind them.
         </p>
         <div class="hero__actions">
-          <a class="btn btn--primary" href="#work">See my work</a>
+          <a class="btn btn--primary" href="#work">See selected work →</a>
           <a class="btn" href="mailto:jiawei.long@outlook.com">Email me</a>
         </div>
-        <ul class="hero__links">
-          <li><a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a></li>
-          <li><a href="https://www.linkedin.com/in/jiawei-long/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
-        </ul>
+        <p class="hero__links">
+          <a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a>
+          <a href="https://www.linkedin.com/in/jiawei-long/" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </p>
+        <p class="hero__proof">5 yrs animation rigging · Microsoft hackathon winner · Live client site · Tableau dashboards</p>
       </div>
 
       <figure class="rig" aria-label="Interactive character rig demo">
@@ -72,39 +71,50 @@
         </svg>
         <div class="rigbar" role="group" aria-label="Rig controls">
           <div class="rigbar__row">
-            <span class="rigbar__label">Turn</span>
-            <button type="button" data-view="0">Front</button>
-            <button type="button" data-view="45">3/4</button>
-            <button type="button" data-view="90">Side</button>
-            <button type="button" data-view="180">Back</button>
-            <button type="button" id="rig-auto" class="rigbar__play" aria-pressed="false">▶ Turnaround</button>
-          </div>
-          <input type="range" id="rig-rot" min="-180" max="180" step="1" value="0" aria-label="Character rotation in degrees" />
-          <div class="rigbar__row">
-            <span class="rigbar__label">Pose</span>
-            <button type="button" data-pose="idle">Idle</button>
+            <span class="rigbar__hint">Drag to pose</span>
             <button type="button" data-pose="wave">Wave</button>
             <button type="button" data-pose="cheer">Cheer</button>
-            <button type="button" data-pose="hips">Hands on hips</button>
-            <span class="rigbar__sep"></span>
-            <button type="button" id="rig-skel" aria-pressed="false">Skeleton</button>
-            <button type="button" id="rig-ctrl" aria-pressed="true">Controls</button>
+            <button type="button" id="rig-auto" aria-pressed="false">▶ Turnaround</button>
+            <button type="button" class="rigbar__more" aria-expanded="false" aria-controls="rig-panel">All controls +</button>
+          </div>
+          <div class="rigbar__panel" id="rig-panel" hidden>
+            <div class="rigbar__row">
+              <span class="rigbar__label">View</span>
+              <button type="button" data-view="0">Front</button>
+              <button type="button" data-view="45">3/4</button>
+              <button type="button" data-view="90">Side</button>
+              <button type="button" data-view="180">Back</button>
+            </div>
+            <input type="range" id="rig-rot" min="-180" max="180" step="1" value="0" aria-label="Character rotation in degrees" />
+            <div class="rigbar__row">
+              <span class="rigbar__label">Pose</span>
+              <button type="button" data-pose="idle">Idle</button>
+              <button type="button" data-pose="wave">Wave</button>
+              <button type="button" data-pose="cheer">Cheer</button>
+              <button type="button" data-pose="hips">Hands on hips</button>
+            </div>
+            <div class="rigbar__row">
+              <span class="rigbar__label">Display</span>
+              <button type="button" id="rig-skel" aria-pressed="false">Skeleton</button>
+              <button type="button" id="rig-ctrl" aria-pressed="true">Controls</button>
+            </div>
           </div>
         </div>
         <figcaption>
-          A character I rigged from scratch in code: <b>IK arms &amp; legs solved in 3D with pole vectors</b>, stretchy limbs,
-          a 2.5D head turn and a full turnaround — the same toolkit I used on <em>Looney Tunes</em>.
-          Drag the <span class="c-l">blue</span>/<span class="c-r">red</span> controls to pose it, the <span class="c-c">yellow</span> ring to squat, or drag anywhere to spin.
+          <b>Built from scratch in code.</b> IK limbs, pole vectors, stretchy controls and a 2.5D head turn,
+          inspired by the production rigs I built for animation.
+          <details class="rig__how">
+            <summary>How it works</summary>
+            <p>
+              Arms and legs are solved as two-bone IK in 3D, then projected to the screen, so a knee bending toward
+              you foreshortens instead of bowing sideways. The face is a patch on a real sphere, body parts are
+              depth-sorted as the character turns, and the controls sit on the IK targets like a Maya rig.
+              Drag the <span class="c-l">blue</span>/<span class="c-r">red</span> controls to pose, the
+              <span class="c-c">yellow</span> ring to squat, or drag anywhere to spin.
+            </p>
+          </details>
         </figcaption>
       </figure>
-    </section>
-
-    <!-- STATS STRIP -->
-    <section class="strip" aria-label="Highlights">
-      <div><b>1st</b><span>Place · Microsoft × BrainStation Hackathon (UI)</span></div>
-      <div><b>Live</b><span>Client site in production · karkumicafe.com</span></div>
-      <div><b>35 yrs</b><span>Of Toronto permit data in Tableau dashboards</span></div>
-      <div><b>5 yrs</b><span>Production rigging · Looney Tunes, The Casagrandes</span></div>
     </section>
 
     <!-- WORK -->
@@ -120,42 +130,24 @@
           <p>Interfaces people enjoy using: responsive, accessible, and built to be easy to update.</p>
         </div>
 
-<article class="project project--wide">
+<article class="project project--wide project--karkumi">
           <div class="project__meta">
-            <span class="tag">Client work · Front-end · Redesign</span>
+            <span class="tag">Real client · Front-end</span>
             <span class="mono">2025 → now</span>
           </div>
           <div class="wide__grid">
             <div class="wide__text">
-              <h3>Karkumi Cafe</h3>
-              <p>
-                A real Scarborough café's website. I designed and shipped v1 from Figma to production, and I'm now
-                rebuilding it as v2 on Vercel. Drag the slider to compare the two.
-              </p>
-              <div class="versions">
-                <div>
-                  <p class="versions__label"><span class="pill pill--v1">v1</span> Live · karkumicafe.com</p>
-                  <ul>
-                    <li>Figma → React + Sass (BEM), in production</li>
-                    <li>Menu, brunch, specials, events, contact</li>
-                    <li>Content in JSON, so seasonal updates are data edits</li>
-                  </ul>
-                </div>
-                <div>
-                  <p class="versions__label"><span class="pill pill--v2">v2</span> In development · Vercel</p>
-                  <ul>
-                    <li>Video hero with time-of-day captions</li>
-                    <li>Full menu with jump nav, SEO blog &amp; schema markup</li>
-                    <li>Private-events packages, FAQ &amp; inquiry flow</li>
-                    <li>Mobile action bar: menu · order · call · directions</li>
-                    <li>One <code>site.json</code> as the source of truth</li>
-                  </ul>
-                </div>
+              <h3>Karkumi Café</h3>
+              <p class="lead">From a static café website to a mobile-first hospitality experience.</p>
+              <div class="vs">
+                <p><span class="pill pill--v1">v1</span> Production · karkumicafe.com<br /><small>Designed in Figma, built and shipped by me.</small></p>
+                <p><span class="pill pill--v2">v2</span> Rebuild · in development<br /><small>Video hero, full menu, SEO blog, events inquiry, mobile action bar.</small></p>
               </div>
-              <ul class="stack"><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>Figma</li><li>SEO</li><li>Vercel</li></ul>
+              <p class="hint">Drag the slider to compare.</p>
+              <ul class="stack"><li>Figma</li><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>SEO</li></ul>
               <div class="project__links">
+                <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">Visit v2 →</a>
                 <a href="https://www.karkumicafe.com" target="_blank" rel="noopener">v1 live ↗</a>
-                <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">v2 preview ↗</a>
               </div>
             </div>
 
@@ -330,22 +322,17 @@
 
 <article class="project project--half">
           <div class="project__meta">
-            <span class="tag tag--data">Data · Machine learning</span>
+            <span class="tag tag--data">Data · Computer vision</span>
             <span class="mono">2025</span>
           </div>
           <h3>CSIRO Image-to-Biomass</h3>
-          <p>
-            Estimating pasture biomass from a single photo. I preprocessed the CSIRO dataset and set a baseline,
-            then trained a CNN for five biomass targets, using GroupKFold so no paddock leaks between train and
-            test. The model ships end to end: snap a photo on a phone, get a recommendation.
-          </p>
-          <ol class="pipeline" aria-label="System architecture">
-            <li><b>Expo / React</b><span>capture &amp; history</span></li>
-            <li><b>Express + TS</b><span>auth, GridFS storage</span></li>
-            <li><b>FastAPI</b><span>Keras model service</span></li>
-            <li><b>MongoDB Atlas</b><span>predictions</span></li>
-          </ol>
-          <ul class="stack"><li>Python</li><li>TensorFlow / Keras</li><li>FastAPI</li><li>TypeScript</li><li>MongoDB</li><li>Docker</li><li>Expo</li></ul>
+          <p class="lead">Estimate pasture biomass from a single phone photo.</p>
+          <div class="metric">
+            <p class="metric__value">0.27 <span>→</span> 0.44</p>
+            <p class="metric__label">Image-only weighted R², 5-fold CV · <b>+63%</b> from teacher→student distillation</p>
+          </div>
+          <p class="why">Group-aware validation (no paddock leaks between train and test) · phone → API → model pipeline</p>
+          <ul class="stack"><li>Python</li><li>TensorFlow</li><li>FastAPI</li><li>Expo</li></ul>
         </article>
 
 <article class="project project--half">
@@ -354,12 +341,14 @@
             <span class="mono">2026</span>
           </div>
           <h3>job-radar</h3>
-          <p>
-            My own job-search pipeline. Ingests fresh postings from Greenhouse and Lever APIs into SQLite, extracts
-            salary and contact fields, and scores each posting against a structured profile with Gemini 2.5 Flash
-            to surface "hot leads". Resumes are generated from data: YAML → Jinja2 → LaTeX → PDF.
-          </p>
-          <ul class="stack"><li>Python</li><li>FastAPI</li><li>Gemini</li><li>Pydantic</li><li>SQLite</li><li>LaTeX</li><li>pytest</li></ul>
+          <p class="lead">My own job-search pipeline, from fresh posting to tailored resume.</p>
+          <ol class="flow" aria-label="Pipeline">
+            <li><b>Find</b><span>Greenhouse &amp; Lever APIs → SQLite</span></li>
+            <li><b>Score</b><span>Gemini match against my profile</span></li>
+            <li><b>Research</b><span>Salary &amp; hiring-contact fields</span></li>
+            <li><b>Generate</b><span>YAML → LaTeX → tailored PDF</span></li>
+          </ol>
+          <ul class="stack"><li>Python</li><li>FastAPI</li><li>SQLite</li><li>Gemini</li><li>pytest</li></ul>
           <div class="project__links">
             <a href="https://github.com/oolongjiawei/job-radar" target="_blank" rel="noopener">Code ↗</a>
           </div>
@@ -388,29 +377,19 @@
 
     <!-- ABOUT -->
     <section id="about" class="section about">
-      <header class="section__head">
-        <p class="label">02 — About</p>
-        <h2>From rigs to interfaces</h2>
-      </header>
+      <p class="label">02 — About</p>
       <div class="about__grid">
-        <blockquote>
-          “Technical complexity means nothing if the user experience fails.”
-        </blockquote>
+        <h2 class="about__title">From rigs<br />to interfaces</h2>
         <div class="about__body">
-          <p>
-            A rig is a user interface for animators. If the controls are confusing, the most elegant
-            joint hierarchy in the world still slows the whole show down. Five years of that taught me to
-            treat every structure as an experience someone has to live with.
+          <blockquote>“A rig is a user interface for animators.”</blockquote>
+          <p class="about__lead">
+            If the controls are confusing, even the most elegant system fails. That lesson now shapes how I
+            build interfaces, and how I present data.
           </p>
           <p>
-            I retrained through BrainStation's software engineering bootcamp, where our team won the Microsoft
-            hackathon for the most user-friendly design, and George Brown's Applied AI program (Honours), where I
-            worked with Python, SQL and Tableau to turn open data into dashboards and stories. At
-            <strong>Kinectrics</strong> I built and redesigned interface screens for an internal AI tool.
-          </p>
-          <p>
-            I'm looking for <strong>front-end developer</strong> or <strong>data analyst</strong> roles — teams
-            where how something looks, and what the numbers say, both matter.
+            I retrained through BrainStation's software engineering bootcamp and George Brown's Applied AI program
+            (Honours), and I'm looking for <strong>front-end developer</strong> or <strong>data analyst</strong>
+            roles where how something looks, and what the numbers say, both matter.
           </p>
         </div>
       </div>
@@ -420,50 +399,36 @@
     <section id="experience" class="section">
       <header class="section__head">
         <p class="label">03 — Experience &amp; education</p>
-        <h2>The timeline</h2>
+        <h2>The path so far</h2>
       </header>
-      <ol class="timeline">
-        <li>
-          <span class="mono">Jan – Apr 2026</span>
-          <div>
-            <h3>AI Developer (Co-op) · Kinectrics</h3>
-            <p>Built and redesigned interface screens for an internal AI tool from verbal briefs, demoing and iterating each week. Also worked on its retrieval workflows and evidence traceability, so every answer links back to its source.</p>
-          </div>
+      <ol class="eras">
+        <li class="era">
+          <div class="era__head"><span class="mono">2025—26</span><h3>Front end &amp; data</h3></div>
+          <ul>
+            <li><b>Kinectrics</b> · AI Developer co-op<span>Built and redesigned interface screens for an internal AI tool; worked on its retrieval and evidence tracing.</span></li>
+            <li><b>Karkumi Café</b> · Front-end developer &amp; designer<span>Designed and shipped the café's website; v2 rebuild in progress.</span></li>
+            <li><b>George Brown College</b> · Applied A.I. Solutions, Honours<span>Tableau, Python &amp; SQL for analysis, machine learning.</span></li>
+          </ul>
         </li>
-        <li>
-          <span class="mono">2025 – 2026</span>
-          <div>
-            <h3>Applied A.I. Solutions Development · George Brown College</h3>
-            <p>Postgraduate Certificate, Honours. Data visualization &amp; storytelling (Tableau), Python and SQL for analysis, machine learning and NLP.</p>
-          </div>
+        <li class="era">
+          <div class="era__head"><span class="mono">2024</span><h3>Software</h3></div>
+          <ul>
+            <li><b>BrainStation</b> · Software Engineering diploma<span>Full-stack JavaScript; Fortune House capstone.</span></li>
+            <li><b>Microsoft × BrainStation hackathon</b> · 1st place<span>Recognized for the most user-friendly design.</span></li>
+          </ul>
         </li>
-        <li>
-          <span class="mono">Summer 2024</span>
-          <div>
-            <h3>Software Engineering Diploma · BrainStation</h3>
-            <p>Full-stack JavaScript bootcamp. Won 1st place at the Microsoft industry hackathon.</p>
-          </div>
+        <li class="era">
+          <div class="era__head"><span class="mono">2018—23</span><h3>Animation</h3></div>
+          <ul>
+            <li><b>Jam Filled Entertainment</b> · 2D rigger<span><em>The Casagrandes</em>, <em>Vida the Vet</em>.</span></li>
+            <li><b>Yowza! Animation</b> · 2D rigger<span><em>Looney Tunes</em>; reusable rig templates and preset controls.</span></li>
+          </ul>
         </li>
-        <li>
-          <span class="mono">2021 – 2023</span>
-          <div>
-            <h3>2D Rigger · Jam Filled Entertainment</h3>
-            <p>Rigged characters for <em>The Casagrandes</em> and <em>Vida the Vet</em> inside a large production pipeline, keeping downstream animation teams unblocked.</p>
-          </div>
-        </li>
-        <li>
-          <span class="mono">2018 – 2022</span>
-          <div>
-            <h3>2D Rigger · Yowza! Animation</h3>
-            <p>Rigged characters for <em>Looney Tunes</em>. Refined reusable rig templates, file structure and preset controls so animators worked faster.</p>
-          </div>
-        </li>
-        <li>
-          <span class="mono">2014 – 2018</span>
-          <div>
-            <h3>Bachelor of Animation · Sheridan College</h3>
-            <p>Where the obsession with how things move started.</p>
-          </div>
+        <li class="era">
+          <div class="era__head"><span class="mono">2014—18</span><h3>Foundation</h3></div>
+          <ul>
+            <li><b>Sheridan College</b> · Bachelor of Animation<span>Where the obsession with how things move started.</span></li>
+          </ul>
         </li>
       </ol>
     </section>
@@ -474,24 +439,12 @@
         <p class="label">04 — Toolkit</p>
         <h2>What I work with</h2>
       </header>
-      <div class="skills">
-        <div class="skill">
-          <h3>Front end</h3>
-          <ul><li>React</li><li>JavaScript (ES6+)</li><li>TypeScript</li><li>HTML5 &amp; semantic markup</li><li>Sass (BEM) · CSS</li><li>Responsive &amp; accessible UI</li><li>Vite · Vercel</li></ul>
-        </div>
-        <div class="skill">
-          <h3>Data analysis</h3>
-          <ul><li>Python (pandas, NumPy)</li><li>SQL</li><li>Tableau · TabPy</li><li>Jupyter</li><li>Data visualization &amp; storytelling</li><li>KPI, YoY &amp; Pareto analysis</li><li>scikit-learn · TensorFlow</li></ul>
-        </div>
-        <div class="skill">
-          <h3>Back end &amp; tools</h3>
-          <ul><li>Node.js · Express</li><li>REST APIs · FastAPI</li><li>MySQL · Knex</li><li>MongoDB · SQLite</li><li>Git / GitHub</li><li>Docker</li></ul>
-        </div>
-        <div class="skill">
-          <h3>Design &amp; craft</h3>
-          <ul><li>Figma</li><li>User-centred design</li><li>Rigging &amp; technical art</li><li>Adobe CC</li><li>AI-assisted dev, reviewed critically</li></ul>
-        </div>
-      </div>
+      <dl class="caps">
+        <div><dt>Front end</dt><dd>React · TypeScript · Sass (BEM) · responsive &amp; accessible UI</dd></div>
+        <div><dt>Data analysis</dt><dd>Python (pandas) · SQL · Tableau · data storytelling</dd></div>
+        <div><dt>Back end &amp; data stores</dt><dd>Node / Express · FastAPI · MySQL · MongoDB</dd></div>
+        <div><dt>Design &amp; technical art</dt><dd>Figma · UX · character rigging</dd></div>
+      </dl>
     </section>
 
     <!-- CONTACT -->
