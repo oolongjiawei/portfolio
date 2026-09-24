@@ -191,21 +191,26 @@
               </div>
             </div>
 
-            <figure class="compare" data-device="desktop">
+            <figure class="compare" data-device="mobile">
               <div class="compare__tabs" role="group" aria-label="Device">
-                <button type="button" data-device="desktop" aria-pressed="true">Desktop</button>
-                <button type="button" data-device="mobile" aria-pressed="false">Mobile</button>
+                <button type="button" data-device="mobile" aria-pressed="true">Mobile</button>
+                <button type="button" data-device="desktop" aria-pressed="false">Desktop</button>
               </div>
-              <div class="compare__stage">
-                <img class="compare__img" data-v="v2" src="assets/karkumi-v2-desktop.jpg" alt="Karkumi Cafe v2 homepage, in development" loading="lazy" width="1280" height="800" />
-                <div class="compare__before">
-                  <img class="compare__img" data-v="v1" src="assets/karkumi-v1-desktop.jpg" alt="Karkumi Cafe v1 homepage, live" loading="lazy" width="1280" height="800" />
+              <div class="phone">
+                <span class="phone__top" aria-hidden="true"></span>
+                <div class="compare__stage">
+                  <img class="compare__img" data-v="v2" src="assets/karkumi-v2-mobile.jpg" alt="Karkumi Cafe v2 homepage, in development" loading="lazy" width="640" height="960" />
+                  <div class="compare__before">
+                    <img class="compare__img" data-v="v1" src="assets/karkumi-v1-mobile.jpg" alt="Karkumi Cafe v1 homepage, live" loading="lazy" width="640" height="960" />
+                  </div>
+                  <span class="compare__tag compare__tag--l">v1 · live</span>
+                  <span class="compare__tag compare__tag--r">v2 · dev</span>
+                  <span class="compare__handle" aria-hidden="true"></span>
+                  <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
                 </div>
-                <span class="compare__tag compare__tag--l">v1 · live</span>
-                <span class="compare__tag compare__tag--r">v2 · in development</span>
-                <span class="compare__handle" aria-hidden="true"></span>
-                <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
+                <span class="phone__home" aria-hidden="true"></span>
               </div>
+              <figcaption class="compare__cap">Shown at iPhone 4 size (320 × 480). Drag to compare.</figcaption>
             </figure>
           </div>
         </article>

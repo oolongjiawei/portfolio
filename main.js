@@ -29,8 +29,8 @@ document.querySelectorAll(".compare").forEach((fig) => {
       fig.querySelectorAll("button[data-device]").forEach((b) => b.setAttribute("aria-pressed", b === btn));
       for (const v of ["v1", "v2"]) {
         imgs[v].src = `assets/karkumi-${v}-${device}.jpg`;
-        imgs[v].width = device === "mobile" ? 496 : 1280;
-        imgs[v].height = device === "mobile" ? 780 : 800;
+        imgs[v].width = device === "mobile" ? 640 : 1280;
+        imgs[v].height = device === "mobile" ? 960 : 800;
       }
     });
   });
