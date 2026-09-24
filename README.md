@@ -1,4 +1,4 @@
-# Dorie Long — Portfolio
+# Dorie (Jiawei) Long — Portfolio
 
 Personal portfolio of Dorie (Jiawei) Long, front-end developer in Toronto.
 
