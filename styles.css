@@ -165,6 +165,7 @@ em { font-family: var(--serif); font-style: italic; }
 .versions code { font: 12.5px var(--mono); background: var(--paper-2); padding: 1px 5px; border-radius: 4px; }
 .versions__label { margin: 0; font: 500 12.5px var(--mono); color: var(--ink); display: flex; align-items: center; gap: 8px; }
 .pill { font: 600 11px var(--mono); padding: 2px 8px; border-radius: 999px; color: #fff; }
+.pill--v0 { background: var(--ink-3); }
 .pill--v1 { background: #7a4a3f; }
 .pill--v2 { background: var(--accent); }
 
@@ -267,6 +268,10 @@ em { font-family: var(--serif); font-style: italic; }
 .era li { font-size: 15.5px; color: var(--ink-2); }
 .era li b { color: var(--ink); font-weight: 600; }
 .era em { font: inherit; font-style: italic; }
+.era__date { font: 500 11.5px var(--mono); font-style: normal; color: var(--ink-3); margin-left: 6px; white-space: nowrap; }
+.era .era__points { list-style: disc; margin: 6px 0 0 !important; padding-left: 18px !important; display: grid; gap: 4px !important; }
+.era__points li { font-size: 14px; color: var(--ink-2); }
+.era__points li::marker { color: var(--ink-3); }
 .era li span { display: block; font-size: 14px; color: var(--ink-3); margin-top: 2px; }
 .caps { margin: 0; display: grid; }
 .caps > div { display: grid; grid-template-columns: 300px 1fr; gap: 24px; align-items: baseline; padding: 20px 0; border-top: 1px solid var(--line); }
