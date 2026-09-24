@@ -1,7 +1,7 @@
 // ─────────────────────────────────────────────────────────────
 //  2.5D character rig
 //  - hierarchical skeleton: COG → spine → chest → neck → head
-//  - 2-bone IK arms & legs with pole vectors and stretch
+//  - 2-bone IK arms & legs solved in 3D with pole vectors and stretch
 //  - body parts projected from a turntable angle (rotY) and
 //    depth-sorted, the way a Harmony / Moho turnaround rig works
 // ─────────────────────────────────────────────────────────────
@@ -127,7 +127,8 @@
   const curl = $("path", { d: "M0 0 C4 -16 20 -16 16 -6 C13 1 5 -2 8 -9", fill: "none", stroke: C.hair, "stroke-width": 4.5, "stroke-linecap": "round" }, headG);
   const bun = $("circle", { r: 17, fill: C.hair, stroke: C.line, "stroke-width": OUT }, headG);
   const skull = $("circle", { r: R, fill: C.hair, stroke: C.line, "stroke-width": OUT }, headG);
-  const face = $("ellipse", { fill: C.skin, "clip-path": "url(#rig-headclip)" }, headG);
+  const face = $("path", { fill: C.skin, "clip-path": "url(#rig-headclip)" }, headG);
+  $("circle", { r: R, fill: "none", stroke: C.line, "stroke-width": OUT }, headG);   // outline over the face edge
   const ears = SIDES.map(() => $("ellipse", { fill: C.skin, stroke: C.line, "stroke-width": 2 }, headG));
   const cheeks = SIDES.map(() => $("ellipse", { fill: C.cheek, opacity: 0.45 }, headG));
   const eyes = SIDES.map(() => {
@@ -152,34 +153,37 @@
 
   // Controls (Maya colour convention: left = blue, right = red, centre = yellow)
   const cogCtrl = $("g", { class: "ctrl ctrl--C", "data-ctrl": "cog" }, ctrls);
-  const cogRing = $("ellipse", { rx: 52, ry: 13 }, cogCtrl);
+  const cogRing = $("ellipse", { rx: 46, ry: 10 }, cogCtrl);
   const handCtrl = {}, footCtrl = {};
   for (const s of SIDES) {
-    footCtrl[s] = $("rect", { class: `ctrl ctrl--${tag(s)}`, "data-ctrl": "foot", "data-side": s, rx: 6, width: 40, height: 22 }, ctrls);
+    footCtrl[s] = $("rect", { class: `ctrl ctrl--${tag(s)}`, "data-ctrl": "foot", "data-side": s, rx: 6, width: 36, height: 20 }, ctrls);
   }
   for (const s of SIDES) {
     const g = $("g", { class: `ctrl ctrl--${tag(s)}`, "data-ctrl": "hand", "data-side": s }, ctrls);
-    $("circle", { r: 17 }, g);
-    $("path", { d: "M-23 0H-17M17 0H23M0 -23V-17M0 17V23" }, g);
+    $("circle", { r: 14 }, g);
+    $("path", { d: "M-19 0H-14M14 0H19M0 -19V-14M0 14V19" }, g);
     handCtrl[s] = g;
   }
 
   // ── Math helpers ──
-  function ik(a, t, l1, l2, pole, maxStretch) {
-    const dx = t.x - a.x, dy = t.y - a.y;
-    const d = Math.hypot(dx, dy) || 0.001;
+  // Two-bone IK solved in 3D (rig space: x right, y down, z toward camera at rotY 0),
+  // so a knee that bends toward the camera foreshortens instead of bowing sideways.
+  function ik3(a, t, l1, l2, pole, maxStretch) {
+    const dx = t.x - a.x, dy = t.y - a.y, dz = t.z - a.z;
+    const d = Math.hypot(dx, dy, dz) || 0.001;
     const k = clamp(d / (l1 + l2), 1, maxStretch);   // stretchy IK
     const L1 = l1 * k, L2 = l2 * k;
     const dc = clamp(d, Math.abs(L1 - L2) + 1, L1 + L2 - 0.01);
-    const ux = dx / d, uy = dy / d;
-    const end = { x: a.x + ux * dc, y: a.y + uy * dc };
-    const ang = Math.acos(clamp((L1 * L1 + dc * dc - L2 * L2) / (2 * L1 * dc), -1, 1));
-    const base = Math.atan2(uy, ux);
-    const e1 = { x: a.x + Math.cos(base + ang) * L1, y: a.y + Math.sin(base + ang) * L1 };
-    const e2 = { x: a.x + Math.cos(base - ang) * L1, y: a.y + Math.sin(base - ang) * L1 };
-    // Pole vector picks which way the elbow / knee bends
-    const dot = (e) => (e.x - a.x) * pole.x + (e.y - a.y) * pole.y;
-    return { mid: dot(e1) >= dot(e2) ? e1 : e2, end };
+    const u = { x: dx / d, y: dy / d, z: dz / d };
+    const pd = pole.x * u.x + pole.y * u.y + pole.z * u.z;
+    let w = { x: pole.x - pd * u.x, y: pole.y - pd * u.y, z: pole.z - pd * u.z };
+    const wl = Math.hypot(w.x, w.y, w.z);
+    w = wl > 1e-4 ? { x: w.x / wl, y: w.y / wl, z: w.z / wl } : { x: 0, y: 0, z: 1 };
+    const ca = clamp((L1 * L1 + dc * dc - L2 * L2) / (2 * L1 * dc), -1, 1), sa = Math.sqrt(1 - ca * ca);
+    return {
+      mid: { x: a.x + L1 * (u.x * ca + w.x * sa), y: a.y + L1 * (u.y * ca + w.y * sa), z: a.z + L1 * (u.z * ca + w.z * sa) },
+      end: { x: a.x + u.x * dc, y: a.y + u.y * dc, z: a.z + u.z * dc },
+    };
   }
   const hosePath = (a, m, b) => {
     const cx = 2 * m.x - (a.x + b.x) / 2, cy = 2 * m.y - (a.y + b.y) / 2;   // curve passes through m
@@ -229,7 +233,7 @@
     if (d.kind === "turn") {
       S.phi = d.phi0 + (p.x - d.x0) * 0.014;
     } else if (d.kind === "cog") {
-      S.cogGoal = { x: clamp(d.cog0.x + p.x - d.x0, -40, 40), y: clamp(d.cog0.y + p.y - d.y0, -8, 50) };
+      S.cogGoal = { x: clamp(d.cog0.x + p.x - d.x0, -40, 40), y: clamp(d.cog0.y + p.y - d.y0, -8, 30) };
       S.cog = { ...S.cogGoal };
     } else if (d.kind === "hand") {
       const sh = S.sh[d.side], h = S.handGoal[d.side];
@@ -337,7 +341,7 @@
     // ── Skeleton (screen space) ──
     const J = {};
     J.cog = { x: ROOT_X + S.cog.x, y: 262 + S.cog.y + hop };
-    const lean = sp * Math.max(0, S.cog.y) * 0.35;        // lean forward when squatting
+    const lean = sp * Math.max(0, S.cog.y) * 0.35;        // lean forward when squatting (matches chest3)
     J.chest = { x: J.cog.x + lean, y: J.cog.y - 94 + breath };
     J.spine = { x: (J.cog.x + J.chest.x) / 2, y: (J.cog.y + J.chest.y) / 2 };
     J.neck = { x: J.chest.x, y: J.chest.y - 16 };
@@ -345,27 +349,36 @@
     J.headEnd = { x: J.head.x, y: J.head.y - R };
 
     const limbDepth = {};
+    // 3D helpers: rig space → screen, and depth toward the camera
+    const scr = (p) => ({ x: ROOT_X + p.x * cp + p.z * sp, y: p.y });
+    const dep = (p) => -p.x * sp + p.z * cp;
+    const cog3 = { x: S.cog.x * cp, y: J.cog.y, z: S.cog.x * sp };
+    const chest3 = { x: cog3.x, y: J.chest.y, z: cog3.z + Math.max(0, S.cog.y) * 0.35 };
     for (const s of SIDES) {
-      // Leg: hip → knee → ankle, knee points the way the character faces
-      J[`hip${s}`] = { x: J.cog.x + proj(s * 15, 0), y: J.cog.y + 8 };
+      // Leg: hip → knee → ankle; knee points forward and slightly out
+      const hip3 = { x: cog3.x + s * 15, y: J.cog.y + 8, z: cog3.z };
       const ft = S.foot[s];
-      const ankleT = { x: ROOT_X + proj(ft.x, ft.z), y: GROUND - 12 - ft.lift };
-      const leg = ik(J[`hip${s}`], ankleT, LEG[0], LEG[1], { x: sp + s * cp * 0.35, y: 0.05 }, 1.12);
-      J[`kn${s}`] = leg.mid; J[`an${s}`] = leg.end;
+      const ankle3 = { x: ft.x, y: GROUND - 12 - ft.lift, z: ft.z };
+      const leg3 = ik3(hip3, ankle3, LEG[0], LEG[1], { x: s * 0.3, y: 0, z: 1 }, 1.12);
+      J[`hip${s}`] = scr(hip3); J[`kn${s}`] = scr(leg3.mid); J[`an${s}`] = scr(leg3.end); J[`ft${s}`] = scr(ankle3);
+      const leg = { mid: J[`kn${s}`], end: J[`an${s}`] };
       J[`toe${s}`] = { x: leg.end.x + sp * 16, y: leg.end.y + 8 };
-      limbDepth[`leg${s}`] = depth(s * 15, 0) + depth(ft.x, ft.z) * 0.2;
+      limbDepth[`leg${s}`] = dep(hip3) + dep(leg3.mid) * 0.2;
 
-      // Arm: shoulder → elbow → wrist, elbow points out and back
-      J[`sh${s}`] = { x: J.chest.x + proj(s * 34, 0), y: J.chest.y + 8 };
+      // Arm: shoulder → elbow → wrist; elbow points out, down and back (pole vector)
+      const sh3 = { x: chest3.x + s * 34, y: chest3.y + 8, z: chest3.z };
+      J[`sh${s}`] = scr(sh3);
       S.sh[s] = J[`sh${s}`];
       const h = S.hand[s];
       const wave = s === 1 ? Math.sin(t / 105) * 15 * S.wave * live : 0;
-      const handT = { x: J[`sh${s}`].x + proj(h.x + wave, h.z), y: J[`sh${s}`].y + h.y + hop * 0.3 };
-      const arm = ik(J[`sh${s}`], handT, ARM[0], ARM[1], { x: s * cp - sp * 0.9, y: 0.7 }, 1.3);
-      J[`el${s}`] = arm.mid; J[`wr${s}`] = arm.end;
+      const hand3 = { x: sh3.x + h.x + wave, y: sh3.y + h.y + hop * 0.3, z: sh3.z + h.z };
+      const arm3 = ik3(sh3, hand3, ARM[0], ARM[1], { x: s, y: 0.7, z: -0.9 }, 1.3);
+      const arm = { mid: scr(arm3.mid), end: scr(arm3.end) };
+      J[`el${s}`] = arm.mid; J[`wr${s}`] = arm.end; J[`ht${s}`] = scr(hand3);
       const ang = Math.atan2(arm.end.y - arm.mid.y, arm.end.x - arm.mid.x);
       J[`hn${s}`] = { x: arm.end.x + Math.cos(ang) * 16, y: arm.end.y + Math.sin(ang) * 16 };
-      limbDepth[`arm${s}`] = depth(s * 34, 0) + depth(h.x, h.z) * 0.15;
+      limbDepth[`arm${s}`] = dep(sh3) - dep(chest3) + (dep(arm3.mid) - dep(sh3)) * 0.3;
+      limbDepth[`hand${s}`] = dep(arm3.end) - dep(chest3);   // hand vs. the head's centre plane
 
       // Draw leg
       const L = legs[s];
@@ -393,8 +406,9 @@
       `L${f(xT + hwT - 14)} ${f(top)}Q${f(xT + hwT)} ${f(top)} ${f(xT + hwT)} ${f(top + 14)}` +
       `L${f(xB + hwB)} ${f(bot - 8)}Q${f(xB + hwB)} ${f(bot)} ${f(xB + hwB - 8)} ${f(bot)}` +
       `L${f(xB - hwB + 8)} ${f(bot)}Q${f(xB - hwB)} ${f(bot)} ${f(xB - hwB)} ${f(bot - 8)}Z`);
-    const hwP = Math.hypot(26 * cp, 18 * sp);
-    brief.setAttribute("d", `M${f(xB - hwP)} ${f(J.cog.y + 6)}H${f(xB + hwP)}V${f(J.cog.y + 32)}H${f(xB - hwP)}Z`);
+    // Pelvis: rounded, and only as deep as the legs in profile so it never pokes out
+    const hwP = Math.hypot(25 * cp, 11 * sp), pY = J.cog.y;
+    brief.setAttribute("d", `M${f(xB - hwP)} ${f(pY + 4)}H${f(xB + hwP)}V${f(pY + 16)}Q${f(xB + hwP)} ${f(pY + 28)} ${f(xB)} ${f(pY + 28)}Q${f(xB - hwP)} ${f(pY + 28)} ${f(xB - hwP)} ${f(pY + 16)}Z`);
 
     // A band of the torso surface between two longitudes → visible [minX, maxX]
     const band = (lo, hi, a, b) => {
@@ -416,7 +430,7 @@
     }
     SIDES.forEach((s, i) => {
       const l = s * 0.24, x3 = 34 * Math.sin(l), z3 = 21 * Math.cos(l);
-      const vis = depth(x3, z3) > 1;
+      const vis = depth(x3, z3) > 8;
       const x = xT + proj(x3, z3);
       show(strings[i].l, vis); show(strings[i].tip, vis);
       strings[i].l.setAttribute("d", `M${f(x)} ${f(top + 5)}L${f(x + sp * 2)} ${f(top + 34)}`);
@@ -434,59 +448,82 @@
     const np = `M${f(J.chest.x)} ${f(J.chest.y)}L${f(J.head.x)} ${f(J.head.y + 20)}`;
     neck.o.setAttribute("d", np); neck.f.setAttribute("d", np);
 
-    // ── Head: sphere projection with its own yaw (look-at) ──
+    // ── Head: a real sphere with its own yaw (look-at) and pitch ──
     const recent = t - S.look.t < 3000;
     const ldx = recent ? S.look.x - J.head.x : 0, ldy = recent ? S.look.y - J.head.y : 0;
     S.yaw = lerp(S.yaw, clamp(ldx / 170, -1, 1) * rad(32) * cp, reduced ? 1 : 0.08);
     S.pitch = lerp(S.pitch, -clamp(ldy / 220, -1, 1) * 0.16, reduced ? 1 : 0.08);
-    const ph = phi + S.yaw, pitch = S.pitch;
-    const sph = (lam, beta, r = R) => {
-      const b = beta + pitch;
-      return { x: r * Math.cos(b) * Math.sin(lam + ph), y: -r * Math.sin(b), d: r * Math.cos(b) * Math.cos(lam + ph), c: Math.cos(lam + ph) };
-    };
+    const ph = phi + S.yaw;
+    const cP = Math.cos(S.pitch), sP = Math.sin(S.pitch), cY = Math.cos(ph), sY = Math.sin(ph);
+    // head-local (y up) → view space: pitch about X, then yaw about Y; and the inverse
+    const toView = (x, y, z) => { const y1 = y * cP + z * sP, z1 = -y * sP + z * cP; return { x: x * cY + z1 * sY, y: y1, z: -x * sY + z1 * cY }; };
+    const toLocal = (x, y, z) => { const x0 = x * cY - z * sY, z1 = x * sY + z * cY; return { x: x0, y: y * cP - z1 * sP, z: y * sP + z1 * cP }; };
+    const lonLat = (lon, lat) => toView(Math.cos(lat) * Math.sin(lon), Math.sin(lat), Math.cos(lat) * Math.cos(lon));
+    const sph = (lon, lat, r = R) => { const v = lonLat(lon, lat); return { x: r * v.x, y: -r * v.y, d: r * v.z, c: v.z }; };
     const roll = S.tilt + Math.sin(t / 1300) * 1.5 * live;
     headG.setAttribute("transform", `translate(${f(J.head.x)} ${f(J.head.y)}) rotate(${f(roll)})`);
 
-    // Face = the band of the sphere between longitudes ±77°, clipped to the skull
-    const phw = wrap(ph), A = rad(77);
-    const lo = Math.max(-Math.PI / 2, phw - A), hi = Math.min(Math.PI / 2, phw + A);
-    const faceOn = lo < hi;
-    show(face, faceOn);
-    if (faceOn) {
-      const xl = R * Math.sin(lo), xr = R * Math.sin(hi);
-      set(face, { cx: f((xl + xr) / 2), cy: f(R * 0.3 - pitch * R * 0.8), rx: f((xr - xl) / 2 + 1), ry: f(R * 0.74) });
+    // Face = an oval patch of the sphere (in longitude/latitude). Project its outline;
+    // where the outline slips behind the head, follow the silhouette instead.
+    const FW = 1.32, FC = -0.465, FH = 0.785;
+    const inFace = (v) => { const l = toLocal(v.x, v.y, v.z); const lon = Math.atan2(l.x, l.z), lat = Math.asin(clamp(l.y, -1, 1)); return (lon / FW) ** 2 + ((lat - FC) / FH) ** 2 <= 1; };
+    const NF = 72, FP = [];
+    for (let i = 0; i < NF; i++) { const a = (i / NF) * Math.PI * 2; FP.push(lonLat(FW * Math.cos(a), FC + FH * Math.sin(a))); }
+    const vis = FP.map((p) => p.z >= 0);
+    const toLimb = (a, b) => { const u = a.z / (a.z - b.z); const x = a.x + (b.x - a.x) * u, y = a.y + (b.y - a.y) * u; const l = Math.hypot(x, y) || 1; return { x: x / l, y: y / l, z: 0 }; };
+    let facePts = null;
+    if (vis.every(Boolean)) facePts = FP;
+    else if (vis.some(Boolean)) {
+      facePts = [];
+      const s0 = vis.findIndex((v, i) => v && !vis[(i - 1 + NF) % NF]);
+      for (let k = 0; k < NF; k++) {
+        const i = (s0 + k) % NF, j = (i + 1) % NF;
+        facePts.push(FP[i]);
+        if (!vis[j]) {
+          let m = j; while (!vis[(m + 1) % NF]) m = (m + 1) % NF;
+          const n = (m + 1) % NF, e0 = toLimb(FP[i], FP[j]), e1 = toLimb(FP[m], FP[n]);
+          const a0 = Math.atan2(e0.y, e0.x);
+          let da = wrap(Math.atan2(e1.y, e1.x) - a0);
+          const mid = a0 + da / 2;
+          if (!inFace({ x: Math.cos(mid), y: Math.sin(mid), z: 0 })) da -= Math.sign(da) * Math.PI * 2;
+          const steps = Math.max(2, Math.ceil(Math.abs(da) / 0.08));
+          for (let q = 0; q <= steps; q++) { const a = a0 + (da * q) / steps; facePts.push({ x: Math.cos(a), y: Math.sin(a), z: 0 }); }
+          const kn = (n - s0 + NF) % NF;
+          if (kn === 0) break;
+          k = kn - 1;
+        }
+      }
     }
+    show(face, !!facePts);
+    if (facePts) face.setAttribute("d", "M" + facePts.map((p) => `${f(p.x * R)} ${f(-p.y * R)}`).join("L") + "Z");
+
+    const blinking = t > S.blinkAt && t < S.blinkAt + 130;
+    const lx = clamp(ldx / 60, -1, 1) * 1.5, ly = clamp(ldy / 60, -1, 1) * 1.5;
     SIDES.forEach((s, i) => {
-      const lam = s * 0.45;
-      // Eyes
-      const e = sph(lam, -0.05);
-      const on = e.d > R * 0.15;
+      const lam = s * 0.42;
+      const e = sph(lam, -0.02);
+      const on = e.c > 0.22;
       show(eyes[i].g, on);
-      const blinking = t > S.blinkAt && t < S.blinkAt + 130;
-      const lx = clamp(ldx / 60, -1, 1) * 1.5, ly = clamp(ldy / 60, -1, 1) * 1.5;
-      set(eyes[i].ball, { cx: f(e.x + lx), cy: f(e.y + ly), rx: f(5 * Math.max(e.c, 0.3)), ry: blinking ? 0.8 : 7 });
-      set(eyes[i].glint, { cx: f(e.x + lx + 1.5 * e.c), cy: f(e.y + ly - 2.5) });
+      set(eyes[i].ball, { cx: f(e.x + lx * e.c), cy: f(e.y + ly), rx: f(5 * Math.max(e.c, 0.3)), ry: blinking ? 0.8 : 7 });
+      set(eyes[i].glint, { cx: f(e.x + lx * e.c + 1.5 * e.c), cy: f(e.y + ly - 2.5) });
       show(eyes[i].glint, on && !blinking);
-      // Brows
-      const b = sph(lam, 0.22);
-      show(brows[i], b.d > R * 0.15);
+      const b = sph(lam, 0.24);
+      show(brows[i], b.c > 0.22);
       const bw = 7 * Math.max(b.c, 0.3), by = b.y + S.brow;
       brows[i].setAttribute("d", `M${f(b.x - bw)} ${f(by)}Q${f(b.x)} ${f(by - 4)} ${f(b.x + bw)} ${f(by)}`);
-      // Cheeks
-      const k = sph(s * 0.85, -0.3);
-      show(cheeks[i], k.d > R * 0.1);
+      const k = sph(s * 0.8, -0.3);
+      show(cheeks[i], k.c > 0.15);
       set(cheeks[i], { cx: f(k.x), cy: f(k.y), rx: f(6.5 * Math.max(k.c, 0)), ry: 4.5 });
-      // Ears
-      const ear = sph(s * 1.62, -0.05);
-      show(ears[i], ear.d > -R * 0.12);
+      const ear = sph(s * 1.62, -0.08);
+      show(ears[i], ear.c > -0.3);
       set(ears[i], { cx: f(ear.x), cy: f(ear.y), rx: f(4.5 + 5 * Math.abs(ear.c)), ry: 10 });
     });
     if (t > S.blinkAt + 130) S.blinkAt = t + 2200 + Math.random() * 2800;
     const n = sph(0, -0.2, R * 1.07);
-    show(nose, n.d > -R * 0.02);
+    show(nose, n.c > -0.02);
     set(nose, { cx: f(n.x), cy: f(n.y) });
-    const m = sph(0, -0.47);
-    show(mouth, m.d > R * 0.12);
+    const m = sph(0, -0.5);
+    show(mouth, m.c > 0.2);
     const mw = 8 * Math.max(m.c, 0.35);
     if (S.mouth === "open") {
       set(mouth, { fill: C.mouth, d: `M${f(m.x - mw)} ${f(m.y - 1)}Q${f(m.x)} ${f(m.y + 13)} ${f(m.x + mw)} ${f(m.y - 1)}Z` });
@@ -494,7 +531,7 @@
       set(mouth, { fill: "none", d: `M${f(m.x - mw)} ${f(m.y)}Q${f(m.x)} ${f(m.y + 7)} ${f(m.x + mw)} ${f(m.y)}` });
     }
     const top3 = sph(0.15, 1.35);
-    curl.setAttribute("transform", `translate(${f(top3.x)} ${f(top3.y - 2)}) scale(${f(Math.cos(ph) || 0.01)} 1)`);
+    curl.setAttribute("transform", `translate(${f(top3.x)} ${f(top3.y - 2)}) scale(${f(cY || 0.01)} 1)`);
     const bn = sph(Math.PI, 0.95, R + 6);
     set(bun, { cx: f(bn.x), cy: f(bn.y) });
     // Bun goes in front of or behind the skull
@@ -506,30 +543,47 @@
     const legsSorted = SIDES.slice().sort((a, b) => limbDepth[`leg${a}`] - limbDepth[`leg${b}`]);
     legsSorted.forEach((s) => order.push(legs[s].g));
     const armsSorted = SIDES.slice().sort((a, b) => limbDepth[`arm${a}`] - limbDepth[`arm${b}`]);
+    // Arms: behind the torso, between torso and head, or in front of the head
     const behind = armsSorted.filter((s) => limbDepth[`arm${s}`] < -6);
-    const front = armsSorted.filter((s) => limbDepth[`arm${s}`] >= -6);
+    const midArms = armsSorted.filter((s) => limbDepth[`arm${s}`] >= -6 && limbDepth[`hand${s}`] <= 4);
+    const front = armsSorted.filter((s) => limbDepth[`arm${s}`] >= -6 && limbDepth[`hand${s}`] > 4);
     behind.forEach((s) => order.push(arms[s].g));
     if (hoodD < 0) order.push(hood);
     order.push(torsoG, neckG);
     if (hoodD >= 0) order.push(hood);
+    midArms.forEach((s) => order.push(arms[s].g));
     order.push(headG);
     front.forEach((s) => order.push(arms[s].g));
-    const key = `${legsSorted}|${behind}|${front}|${hoodD < 0}`;
+    const key = `${legsSorted}|${behind}|${midArms}|${front}|${hoodD < 0}`;
     if (key !== lastOrder) { order.forEach((g) => char.appendChild(g)); lastOrder = key; }
 
     // ── Skeleton overlay ──
     if (S.skel) {
       BONES.forEach(([a, b], i) => boneEls[i].setAttribute("d", bonePath(J[a], J[b])));
       JOINTS.forEach((j, i) => set(jointEls[i], { cx: f(J[j].x), cy: f(J[j].y) }));
-      labelEls.forEach(([j, e]) => set(e, { x: f(J[j].x + 8), y: f(J[j].y - 6) }));
+      labelEls.forEach(([j, e]) => {
+        const side = j.endsWith("-1") ? -1 : j.endsWith("1") ? 1 : 0;
+        let on = true;
+        if (side) {
+          // When the L/R pair overlaps (side views), only label the nearer joint
+          const twin = j.slice(0, -(side < 0 ? 2 : 1)) + (side < 0 ? "1" : "-1");
+          const kind = j.startsWith("kn") ? "leg" : "arm";
+          const near = limbDepth[`${kind}${side}`] >= limbDepth[`${kind}${-side}`];
+          if (Math.hypot(J[j].x - J[twin].x, J[j].y - J[twin].y) < 28 && !near) on = false;
+        }
+        show(e, on);
+        const right = side ? J[j].x >= J.chest.x : j !== "cog";
+        set(e, { x: f(J[j].x + (right ? 9 : -9)), y: f(J[j].y + 3), "text-anchor": right ? "start" : "end" });
+      });
     }
 
-    // ── Controls ──
+    // ── Controls sit on the IK targets, not the solved joints ──
     if (S.ctrls) {
-      set(cogRing, { cx: f(J.cog.x), cy: f(J.cog.y + 4) });
+      set(cogRing, { cx: f(J.cog.x), cy: f(J.cog.y + 24) });
       for (const s of SIDES) {
-        handCtrl[s].setAttribute("transform", `translate(${f(J[`wr${s}`].x + (J[`hn${s}`].x - J[`wr${s}`].x) * 0.5)} ${f(J[`wr${s}`].y + (J[`hn${s}`].y - J[`wr${s}`].y) * 0.5)})`);
-        set(footCtrl[s], { x: f(J[`an${s}`].x + sp * 7 - 20), y: f(J[`an${s}`].y - 5) });
+        const ht = J[`ht${s}`], ft = J[`ft${s}`];
+        handCtrl[s].setAttribute("transform", `translate(${f(ht.x)} ${f(ht.y)})`);
+        set(footCtrl[s], { x: f(ft.x + sp * 7 - 18), y: f(ft.y - 4) });
       }
     }
 
