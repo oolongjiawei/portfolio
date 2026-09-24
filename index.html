@@ -50,26 +50,50 @@
         </div>
         <ul class="hero__links">
           <li><a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a></li>
-          <li><a href="https://www.linkedin.com/in/jiawei-long" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+          <li><a href="https://www.linkedin.com/in/jiawei-long/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
         </ul>
       </div>
 
-      <figure class="rig" aria-label="Interactive rig: a jointed arm that follows your cursor">
-        <svg id="rig" viewBox="0 0 400 400" role="img" aria-hidden="true">
+      <figure class="rig" aria-label="Interactive character rig demo">
+        <svg id="rig" viewBox="0 0 400 420" aria-hidden="true">
           <defs>
             <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
               <path d="M20 0H0V20" fill="none" class="rig__grid" />
             </pattern>
+            <radialGradient id="rig-spot" cx="50%" cy="58%" r="60%">
+              <stop offset="0" class="rig__spot0" />
+              <stop offset="1" class="rig__spot1" />
+            </radialGradient>
+            <clipPath id="rig-headclip"><circle r="46" /></clipPath>
           </defs>
-          <rect width="400" height="400" fill="url(#grid)" />
-          <g id="rig-bones"></g>
-          <g id="rig-target">
-            <circle r="16" class="rig__ctrl" />
-            <path d="M-24 0H-18M18 0H24M0 -24V-18M0 18V24" class="rig__ctrl" />
-          </g>
+          <rect width="400" height="420" fill="url(#rig-spot)" />
+          <rect width="400" height="420" fill="url(#grid)" />
         </svg>
+        <div class="rigbar" role="group" aria-label="Rig controls">
+          <div class="rigbar__row">
+            <span class="rigbar__label">Turn</span>
+            <button type="button" data-view="0">Front</button>
+            <button type="button" data-view="45">3/4</button>
+            <button type="button" data-view="90">Side</button>
+            <button type="button" data-view="180">Back</button>
+            <button type="button" id="rig-auto" class="rigbar__play" aria-pressed="false">▶ Turnaround</button>
+          </div>
+          <input type="range" id="rig-rot" min="-180" max="180" step="1" value="0" aria-label="Character rotation in degrees" />
+          <div class="rigbar__row">
+            <span class="rigbar__label">Pose</span>
+            <button type="button" data-pose="idle">Idle</button>
+            <button type="button" data-pose="wave">Wave</button>
+            <button type="button" data-pose="cheer">Cheer</button>
+            <button type="button" data-pose="hips">Hands on hips</button>
+            <span class="rigbar__sep"></span>
+            <button type="button" id="rig-skel" aria-pressed="false">Skeleton</button>
+            <button type="button" id="rig-ctrl" aria-pressed="true">Controls</button>
+          </div>
+        </div>
         <figcaption>
-          <span class="mono">ctrl_hand_L</span> — move your cursor. That’s inverse kinematics — the same idea behind the character rigs I built for Looney Tunes.
+          A character I rigged from scratch in code: <b>IK arms &amp; legs with pole vectors</b>, stretchy limbs,
+          a 2.5D head turn and a full turnaround — the same toolkit I used on <em>Looney Tunes</em>.
+          Drag the <span class="c-l">blue</span>/<span class="c-r">red</span> controls to pose it, the <span class="c-c">yellow</span> ring to squat, or drag anywhere to spin.
         </figcaption>
       </figure>
     </section>
@@ -128,25 +152,65 @@
           </div>
         </article>
 
-        <article class="project">
+        <article class="project project--wide">
           <div class="project__meta">
-            <span class="tag">Client work · Front-end</span>
-            <span class="mono">2025</span>
+            <span class="tag">Client work · Front-end · Redesign</span>
+            <span class="mono">2025 → now</span>
           </div>
-          <h3>Karkumi Cafe</h3>
-          <p>
-            Designed and built a real cafe's marketing site from Figma to production, then rebuilt it with a
-            JSON-driven content layer — menu, events and blog updates are data edits, not code changes.
-            SEO schema, video hero, delivery-app ordering, private-events inquiry flow.
-          </p>
-          <ul class="stack"><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>Figma</li><li>Vercel</li></ul>
-          <div class="project__links">
-            <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">Live site ↗</a>
-            <a href="https://www.karkumicafe.com" target="_blank" rel="noopener">karkumicafe.com ↗</a>
+          <div class="wide__grid">
+            <div class="wide__text">
+              <h3>Karkumi Cafe</h3>
+              <p>
+                A real Scarborough café's website. I designed and shipped v1 from Figma to production, and I'm now
+                rebuilding it as v2 on Vercel. Drag the slider to compare the two.
+              </p>
+              <div class="versions">
+                <div>
+                  <p class="versions__label"><span class="pill pill--v1">v1</span> Live · karkumicafe.com</p>
+                  <ul>
+                    <li>Figma → React + Sass (BEM), in production</li>
+                    <li>Menu, brunch, specials, events, contact</li>
+                    <li>Content in JSON, so seasonal updates are data edits</li>
+                  </ul>
+                </div>
+                <div>
+                  <p class="versions__label"><span class="pill pill--v2">v2</span> In development · Vercel</p>
+                  <ul>
+                    <li>Video hero with time-of-day captions</li>
+                    <li>Full menu with jump nav, SEO blog &amp; schema markup</li>
+                    <li>Private-events packages, FAQ &amp; inquiry flow</li>
+                    <li>Mobile action bar: menu · order · call · directions</li>
+                    <li>One <code>site.json</code> as the source of truth</li>
+                  </ul>
+                </div>
+              </div>
+              <ul class="stack"><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>Figma</li><li>SEO</li><li>Vercel</li></ul>
+              <div class="project__links">
+                <a href="https://www.karkumicafe.com" target="_blank" rel="noopener">v1 live ↗</a>
+                <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">v2 preview ↗</a>
+              </div>
+            </div>
+
+            <figure class="compare" data-device="desktop">
+              <div class="compare__tabs" role="group" aria-label="Device">
+                <button type="button" data-device="desktop" aria-pressed="true">Desktop</button>
+                <button type="button" data-device="mobile" aria-pressed="false">Mobile</button>
+              </div>
+              <div class="compare__stage">
+                <img class="compare__img" data-v="v2" src="assets/karkumi-v2-desktop.jpg" alt="Karkumi Cafe v2 homepage, in development" loading="lazy" width="1280" height="800" />
+                <div class="compare__before">
+                  <img class="compare__img" data-v="v1" src="assets/karkumi-v1-desktop.jpg" alt="Karkumi Cafe v1 homepage, live" loading="lazy" width="1280" height="800" />
+                </div>
+                <span class="compare__tag compare__tag--l">v1 · live</span>
+                <span class="compare__tag compare__tag--r">v2 · in development</span>
+                <span class="compare__handle" aria-hidden="true"></span>
+                <input class="compare__range" type="range" min="0" max="100" value="50" aria-label="Slide to compare v1 and v2" />
+              </div>
+            </figure>
           </div>
         </article>
 
-        <article class="project">
+        <article class="project project--half">
           <div class="project__meta">
             <span class="tag tag--win">🏆 1st place</span>
             <span class="mono">2024</span>
@@ -162,7 +226,7 @@
           </div>
         </article>
 
-        <article class="project">
+        <article class="project project--half">
           <div class="project__meta">
             <span class="tag">Full-stack · Capstone</span>
             <span class="mono">2024</span>
@@ -174,6 +238,7 @@
           </p>
           <ul class="stack"><li>React</li><li>Node.js</li><li>Express</li><li>Knex</li><li>MySQL</li></ul>
           <div class="project__links">
+            <a href="https://dorie-fortune-house.vercel.app" target="_blank" rel="noopener">Live demo ↗</a>
             <a href="https://github.com/oolongjiawei/Capstone" target="_blank" rel="noopener">Frontend ↗</a>
             <a href="https://github.com/oolongjiawei/Capstone-API" target="_blank" rel="noopener">API ↗</a>
           </div>
@@ -310,7 +375,7 @@
       <p>Hiring for AI, front-end or full-stack in Toronto? I'd love to talk.</p>
       <a class="contact__mail" href="mailto:jiawei.long@outlook.com">jiawei.long@outlook.com</a>
       <ul class="hero__links">
-        <li><a href="https://www.linkedin.com/in/jiawei-long" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+        <li><a href="https://www.linkedin.com/in/jiawei-long/" target="_blank" rel="noopener">LinkedIn ↗</a></li>
         <li><a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a></li>
       </ul>
     </section>
@@ -318,9 +383,10 @@
 
   <footer class="footer">
     <span>© 2026 Dorie (Jiawei) Long</span>
-    <span class="mono">rigged by hand · Toronto</span>
+    <span class="mono">Toronto, ON</span>
   </footer>
 
   <script src="main.js" defer></script>
+  <script src="rig.js" defer></script>
 </body>
 </html>
