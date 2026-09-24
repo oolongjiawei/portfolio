@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dorie Long — Applied AI Developer</title>
+  <meta name="description" content="Dorie (Jiawei) Long — Applied AI Solutions Developer in Toronto. Former 2D rigger on Looney Tunes, now building ML models, RAG tools and React apps with a user-first mindset." />
+  <meta property="og:title" content="Dorie Long — Applied AI Developer" />
+  <meta property="og:description" content="Former Looney Tunes rigger building ML models, RAG tools and React apps. Toronto." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#f3efe6" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip" href="#work">Skip to work</a>
+
+  <header class="nav">
+    <a class="nav__logo" href="#top" aria-label="Dorie Long, home">
+      <span class="joint"></span>DL
+    </a>
+    <nav class="nav__links" aria-label="Primary">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a class="nav__cta" href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero__text">
+        <p class="eyebrow"><span class="dot"></span>Open to work · Toronto, ON</p>
+        <h1>Dorie Long</h1>
+        <p class="hero__role">Applied AI Solutions Developer<br /><em>&amp; user-first technologist.</em></p>
+        <p class="hero__lede">
+          I spent five years rigging characters for <strong>Looney Tunes</strong> and TV animation —
+          building the hidden skeletons that let animators move fast. Now I build the skeletons
+          behind software: ML models, RAG tools and React interfaces people actually enjoy using.
+        </p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="#work">See my work</a>
+          <a class="btn" href="mailto:jiawei.long@outlook.com">Email me</a>
+        </div>
+        <ul class="hero__links">
+          <li><a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a></li>
+          <li><a href="https://www.linkedin.com/in/jiawei-long" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+        </ul>
+      </div>
+
+      <figure class="rig" aria-label="Interactive rig: a jointed arm that follows your cursor">
+        <svg id="rig" viewBox="0 0 400 400" role="img" aria-hidden="true">
+          <defs>
+            <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+              <path d="M20 0H0V20" fill="none" class="rig__grid" />
+            </pattern>
+          </defs>
+          <rect width="400" height="400" fill="url(#grid)" />
+          <g id="rig-bones"></g>
+          <g id="rig-target">
+            <circle r="16" class="rig__ctrl" />
+            <path d="M-24 0H-18M18 0H24M0 -24V-18M0 18V24" class="rig__ctrl" />
+          </g>
+        </svg>
+        <figcaption>
+          <span class="mono">ctrl_hand_L</span> — move your cursor. That’s inverse kinematics — the same idea behind the character rigs I built for Looney Tunes.
+        </figcaption>
+      </figure>
+    </section>
+
+    <!-- STATS STRIP -->
+    <section class="strip" aria-label="Highlights">
+      <div><b>1st</b><span>Place · Microsoft × BrainStation Hackathon</span></div>
+      <div><b>5 yrs</b><span>Production rigging · Looney Tunes, The Casagrandes</span></div>
+      <div><b>RAG</b><span>AI Developer co-op · Kinectrics</span></div>
+      <div><b>Hons.</b><span>Applied AI Solutions · George Brown College</span></div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work" class="section">
+      <header class="section__head">
+        <p class="label">01 — Selected work</p>
+        <h2>Things I've built</h2>
+      </header>
+
+      <div class="projects">
+        <article class="project project--feature">
+          <div class="project__meta">
+            <span class="tag tag--ai">Machine Learning · Full-stack · Mobile</span>
+            <span class="mono">2025</span>
+          </div>
+          <h3>CSIRO Image-to-Biomass</h3>
+          <p>
+            Predicts five pasture-biomass targets (clover, dead, green, total, GDM) from a single photo —
+            no cutting, no weighing. A CNN regression model trained with GroupKFold cross-validation to stop
+            leakage between paddocks, compressed with teacher→student distillation, then shipped end to end
+            so a farmer can snap a photo on their phone and get a recommendation.
+          </p>
+          <ol class="pipeline" aria-label="System architecture">
+            <li><b>Expo / React</b><span>capture &amp; history</span></li>
+            <li><b>Express + TS</b><span>auth, GridFS storage</span></li>
+            <li><b>FastAPI</b><span>Keras model service</span></li>
+            <li><b>MongoDB Atlas</b><span>predictions</span></li>
+          </ol>
+          <ul class="stack"><li>Python</li><li>TensorFlow / Keras</li><li>FastAPI</li><li>TypeScript</li><li>MongoDB</li><li>Docker</li><li>Expo</li></ul>
+        </article>
+
+        <article class="project project--feature">
+          <div class="project__meta">
+            <span class="tag tag--ai">LLM · Automation</span>
+            <span class="mono">2026</span>
+          </div>
+          <h3>job-radar</h3>
+          <p>
+            My own job-search copilot. Pulls fresh postings from Greenhouse and Lever ATS APIs, scores each one
+            against a structured profile with Gemini 2.5 Flash, and surfaces "hot leads" — fresh, high-match, with
+            a real hiring contact. Resumes are generated, never hand-edited: YAML → Jinja2 → LaTeX → PDF.
+          </p>
+          <ul class="stack"><li>Python</li><li>FastAPI</li><li>Gemini</li><li>Pydantic</li><li>SQLite</li><li>LaTeX</li><li>pytest</li></ul>
+          <div class="project__links">
+            <a href="https://github.com/oolongjiawei/job-radar" target="_blank" rel="noopener">Code ↗</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project__meta">
+            <span class="tag">Client work · Front-end</span>
+            <span class="mono">2025</span>
+          </div>
+          <h3>Karkumi Cafe</h3>
+          <p>
+            Designed and built a real cafe's marketing site from Figma to production, then rebuilt it with a
+            JSON-driven content layer — menu, events and blog updates are data edits, not code changes.
+            SEO schema, video hero, delivery-app ordering, private-events inquiry flow.
+          </p>
+          <ul class="stack"><li>React</li><li>Vite</li><li>Sass (BEM)</li><li>Figma</li><li>Vercel</li></ul>
+          <div class="project__links">
+            <a href="https://karkumicafe-leo.vercel.app" target="_blank" rel="noopener">Live site ↗</a>
+            <a href="https://www.karkumicafe.com" target="_blank" rel="noopener">karkumicafe.com ↗</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project__meta">
+            <span class="tag tag--win">🏆 1st place</span>
+            <span class="mono">2024</span>
+          </div>
+          <h3>Microsoft × BrainStation Hackathon</h3>
+          <p>
+            An interactive guide that helps non-technical small-business owners discover Microsoft's AI tools,
+            tailored to their industry. Judges singled out the design as the most user-friendly and innovative.
+          </p>
+          <ul class="stack"><li>React</li><li>Sass</li><li>Responsive UI</li></ul>
+          <div class="project__links">
+            <a href="https://github.com/AnjaliDeviMehra/IndustryProject" target="_blank" rel="noopener">Code ↗</a>
+          </div>
+        </article>
+
+        <article class="project">
+          <div class="project__meta">
+            <span class="tag">Full-stack · Capstone</span>
+            <span class="mono">2024</span>
+          </div>
+          <h3>Fortune House</h3>
+          <p>
+            Personalized readings from birth data using the Four Pillars of Destiny (Bazi). I wrote the
+            calculation logic, the input flow, and a REST API with user profiles and saved fortunes.
+          </p>
+          <ul class="stack"><li>React</li><li>Node.js</li><li>Express</li><li>Knex</li><li>MySQL</li></ul>
+          <div class="project__links">
+            <a href="https://github.com/oolongjiawei/Capstone" target="_blank" rel="noopener">Frontend ↗</a>
+            <a href="https://github.com/oolongjiawei/Capstone-API" target="_blank" rel="noopener">API ↗</a>
+          </div>
+        </article>
+
+        <article class="project project--small">
+          <div class="project__meta"><span class="tag">NLP · Team</span><span class="mono">2025</span></div>
+          <h3>AI Storytime</h3>
+          <p>Team project turning stories into summaries and narrated audiobooks with pretrained summarization and TTS models.</p>
+          <div class="project__links"><a href="https://github.com/oolongjiawei/AI_Storytime" target="_blank" rel="noopener">Repo ↗</a></div>
+        </article>
+
+        <article class="project project--small">
+          <div class="project__meta"><span class="tag">Data</span><span class="mono">2025</span></div>
+          <h3>Python Web Scraping</h3>
+          <p>Scrapes an article from any URL, extracts clean text and stores it for downstream NLP.</p>
+          <div class="project__links"><a href="https://github.com/oolongjiawei/PythonWebScraping" target="_blank" rel="noopener">Repo ↗</a></div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="section about">
+      <header class="section__head">
+        <p class="label">02 — About</p>
+        <h2>From rigs to models</h2>
+      </header>
+      <div class="about__grid">
+        <blockquote>
+          “Technical complexity means nothing if the user experience fails.”
+        </blockquote>
+        <div class="about__body">
+          <p>
+            A rig is a user interface for animators. If the controls are confusing, the most elegant
+            joint hierarchy in the world still slows the whole show down. Five years of that taught me to
+            treat every logical structure as an experience someone has to live with.
+          </p>
+          <p>
+            I retrained through BrainStation's software engineering bootcamp and George Brown's Applied AI
+            program (Honours), then joined <strong>Kinectrics</strong> as an AI developer co-op, improving an
+            internal RAG tool — its retrieval workflows, evidence traceability, and the interface people used
+            every day.
+          </p>
+          <p>
+            I'm looking for roles in <strong>AI / ML application development, front-end, or full-stack</strong> —
+            teams where the model and the user both matter.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section id="experience" class="section">
+      <header class="section__head">
+        <p class="label">03 — Experience &amp; education</p>
+        <h2>The timeline</h2>
+      </header>
+      <ol class="timeline">
+        <li>
+          <span class="mono">Jan – Apr 2026</span>
+          <div>
+            <h3>AI Developer (Co-op) · Kinectrics</h3>
+            <p>Maintained and extended an internal RAG-based AI tool — retrieval workflows and evidence traceability so every answer links back to its source. Redesigned and built interface screens from verbal briefs, demoing and iterating each week.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mono">2025 – 2026</span>
+          <div>
+            <h3>Applied A.I. Solutions Development · George Brown College</h3>
+            <p>Postgraduate Certificate, Honours. Machine learning, deep learning, NLP and deploying AI solutions.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mono">Summer 2024</span>
+          <div>
+            <h3>Software Engineering Diploma · BrainStation</h3>
+            <p>Full-stack JavaScript bootcamp. Won 1st place at the Microsoft industry hackathon.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mono">2021 – 2023</span>
+          <div>
+            <h3>2D Rigger · Jam Filled Entertainment</h3>
+            <p>Rigged characters for <em>The Casagrandes</em> and <em>Vida the Vet</em> inside a large production pipeline, keeping downstream animation teams unblocked.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mono">2018 – 2022</span>
+          <div>
+            <h3>2D Rigger · Yowza! Animation</h3>
+            <p>Rigged characters for <em>Looney Tunes</em>. Refined reusable rig templates, file structure and preset controls so animators worked faster.</p>
+          </div>
+        </li>
+        <li>
+          <span class="mono">2014 – 2018</span>
+          <div>
+            <h3>Bachelor of Animation · Sheridan College</h3>
+            <p>Where the obsession with how things move started.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills" class="section">
+      <header class="section__head">
+        <p class="label">04 — Toolkit</p>
+        <h2>What I work with</h2>
+      </header>
+      <div class="skills">
+        <div class="skill">
+          <h3>AI &amp; Data</h3>
+          <ul><li>Python</li><li>TensorFlow / Keras</li><li>scikit-learn</li><li>Pandas · NumPy</li><li>RAG pipelines</li><li>LLM APIs (Gemini)</li><li>SQL</li><li>Jupyter</li></ul>
+        </div>
+        <div class="skill">
+          <h3>Front end</h3>
+          <ul><li>React</li><li>JavaScript (ES6+)</li><li>TypeScript</li><li>Sass (BEM)</li><li>Responsive &amp; accessible UI</li><li>Expo / React Native</li><li>Vite</li></ul>
+        </div>
+        <div class="skill">
+          <h3>Back end</h3>
+          <ul><li>Node.js · Express</li><li>FastAPI</li><li>REST APIs</li><li>MySQL · Knex</li><li>MongoDB</li><li>SQLite</li><li>Docker</li></ul>
+        </div>
+        <div class="skill">
+          <h3>Design &amp; craft</h3>
+          <ul><li>Figma</li><li>User-centred design</li><li>Rigging &amp; technical art</li><li>Adobe CC</li><li>Git / GitHub</li><li>AI-assisted dev, reviewed critically</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <p class="label">05 — Contact</p>
+      <h2>Let's build something<br /><em>that moves well.</em></h2>
+      <p>Hiring for AI, front-end or full-stack in Toronto? I'd love to talk.</p>
+      <a class="contact__mail" href="mailto:jiawei.long@outlook.com">jiawei.long@outlook.com</a>
+      <ul class="hero__links">
+        <li><a href="https://www.linkedin.com/in/jiawei-long" target="_blank" rel="noopener">LinkedIn ↗</a></li>
+        <li><a href="https://github.com/oolongjiawei" target="_blank" rel="noopener">GitHub ↗</a></li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© 2026 Dorie (Jiawei) Long</span>
+    <span class="mono">rigged by hand · Toronto</span>
+  </footer>
+
+  <script src="main.js" defer></script>
+</body>
+</html>
