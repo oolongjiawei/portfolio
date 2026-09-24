@@ -82,7 +82,7 @@ em { font-family: var(--serif); font-style: italic; }
 .eyebrow { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 18px; font: 500 12px var(--mono); color: var(--ink-3); }
 .dot { width: 8px; height: 8px; border-radius: 50%; background: #2fb36b; box-shadow: 0 0 0 0 #2fb36b80; animation: pulse 2s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 8px #2fb36b00; } 100% { box-shadow: 0 0 0 0 #2fb36b00; } }
-.hero h1 { font: 400 clamp(56px, 9vw, 112px)/0.95 var(--serif); letter-spacing: -0.02em; }
+.hero h1 { font: 600 clamp(38px, 6.2vw, 76px)/1 "Space Grotesk", var(--sans); letter-spacing: -0.04em; }
 .h1__alt { color: var(--ink-3); }
 .hero__role { font-size: clamp(20px, 2.4vw, 26px); line-height: 1.3; margin: 14px 0 22px; color: var(--ink); }
 .hero__role em { color: var(--accent); }
