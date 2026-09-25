@@ -1,8 +1,48 @@
-// Nav border on scroll
+// Nav: border on scroll, reading progress, and "you are here" for the current section
 const nav = document.querySelector(".nav");
-const onScroll = () => nav.classList.toggle("is-scrolled", window.scrollY > 8);
-window.addEventListener("scroll", onScroll, { passive: true });
+const where = nav.querySelector(".nav__where");
+const navLinks = [...nav.querySelectorAll("a[data-num]")];
+const sections = [
+  { el: document.querySelector(".hero"), num: "00", name: "Intro" },
+  ...navLinks.map((a) => ({ el: document.querySelector(a.hash), num: a.dataset.num, name: a.textContent, link: a })),
+];
+let current = null;
+const setCurrent = (s) => {
+  if (s === current) return;
+  current = s;
+  navLinks.forEach((a) => (a === s.link ? a.setAttribute("aria-current", "true") : a.removeAttribute("aria-current")));
+  where.querySelector(".nav__num").textContent = s.num;
+  where.querySelector(".nav__name").textContent = s.name;
+};
+let ticking = false;
+const onScroll = () => {
+  ticking = false;
+  const y = window.scrollY;
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  nav.classList.toggle("is-scrolled", y > 8);
+  nav.style.setProperty("--progress", max > 0 ? Math.min(y / max, 1) : 0);
+  // A section is current once its top passes a line 30% down the viewport; at the very bottom, the last one wins
+  const line = nav.offsetHeight + window.innerHeight * 0.3;
+  let s = sections[0];
+  for (const sec of sections) if (sec.el.getBoundingClientRect().top <= line) s = sec;
+  if (y >= max - 2) s = sections[sections.length - 1];
+  setCurrent(s);
+};
+window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+window.addEventListener("resize", onScroll);
 onScroll();
+
+// Mobile: the "you are here" pill opens the section list
+const setOpen = (open) => {
+  nav.classList.toggle("is-open", open);
+  where.setAttribute("aria-expanded", open);
+};
+where.addEventListener("click", () => setOpen(!nav.classList.contains("is-open")));
+navLinks.forEach((a) => a.addEventListener("click", () => setOpen(false)));
+document.addEventListener("click", (e) => { if (!nav.contains(e.target)) setOpen(false); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && nav.classList.contains("is-open")) { setOpen(false); where.focus(); }
+});
 
 // Reveal on scroll
 const revealables = document.querySelectorAll(".section__head, .project, .timeline li, .skill, .about__grid, .contact");

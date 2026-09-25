@@ -23,13 +23,20 @@
     <a class="nav__logo" href="#top" aria-label="Dorie (Jiawei) Long, home">
       <span class="joint"></span>DL
     </a>
-    <nav class="nav__links" aria-label="Primary">
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-      <a class="nav__cta" href="#contact">Contact</a>
-    </nav>
+    <button class="nav__where" type="button" aria-expanded="false" aria-controls="nav-sections">
+      <span class="visually-hidden">You are in: </span><span class="nav__num">00</span><span class="nav__name">Intro</span>
+      <svg class="nav__chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="nav__right">
+      <nav class="nav__links" id="nav-sections" aria-label="Sections">
+        <a href="#work" data-num="01">Work</a>
+        <a href="#about" data-num="02">About</a>
+        <a href="#experience" data-num="03">Experience</a>
+        <a href="#skills" data-num="04">Skills</a>
+      </nav>
+      <a class="nav__cta" href="#contact" data-num="05">Contact</a>
+    </div>
+    <span class="nav__progress" aria-hidden="true"></span>
   </header>
 
   <main id="top">
@@ -404,7 +411,7 @@
         <li class="era">
           <div class="era__head"><span class="mono">2014—18</span><h3>Foundation</h3></div>
           <ul>
-            <li><b>Sheridan College</b> · Bachelor's Degree, Animation, Oakville <i class="era__date">Sep 2014 – Jun 2018</i><span>Where the obsession with how things move started.</span></li>
+            <li><b>Sheridan College</b> · Bachelor's Degree, Animation, Oakville <i class="era__date">Sep 2014 – Jun 2018</i><span>Where the obsession with how things move started. <a class="era__link" href="https://oolong.portfoliobox.net/" target="_blank" rel="noopener">Graduation portfolio ↗</a></span></li>
           </ul>
         </li>
       </ol>
